@@ -1,112 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Student Login | College Bus Tracking</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>Student Portal | BusTrack</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body class="login-page">
-
-<div class="login-container">
-
-    <!-- ICON -->
-
-    <div class="login-icon">
-        🎓
-    </div>
-
-    <!-- TITLE -->
-
-    <h2>Student Login</h2>
-
-    <p class="login-subtitle">
-        Login to Student Dashboard
-    </p>
-
-
-    <!-- FLASH MESSAGE -->
-
+  <main class="login-container">
+    <div class="login-icon">🎓</div>
+    <h2>Student Portal</h2>
+    <p class="login-subtitle">Access your bus, route and attendance details.</p>
     {% with messages = get_flashed_messages() %}
-
-        {% if messages %}
-
-            <div class="alert">
-                {{ messages[0] }}
-            </div>
-
-        {% endif %}
-
+      {% if messages %}<div class="alert">{{ messages[0] }}</div>{% endif %}
     {% endwith %}
-
-
-    <!-- LOGIN FORM -->
-
-    <form method="POST"
-          action="{{ url_for('student_login') }}">
-
-        <!-- REGISTER NUMBER -->
-
-        <label for="register_no">
-            Register Number
-        </label>
-
-        <input
-            type="text"
-            id="register_no"
-            name="register_no"
-            placeholder="Enter register number"
-            required
-        >
-
-
-        <!-- PASSWORD -->
-
-        <label for="password">
-            Password
-        </label>
-
-        <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter password"
-            required
-        >
-
-
-        <!-- LOGIN BUTTON -->
-
-        <button type="submit"
-                class="btn student-btn">
-
-            Login
-
-        </button>
-
+    <form method="POST" action="{{ url_for('student_login') }}">
+      <label for="register_no">Register Number</label>
+      <input id="register_no" name="register_no" type="text" autocomplete="username" placeholder="Enter register number" required>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" required>
+      <button type="submit" class="btn student-btn">Sign in to Student</button>
     </form>
-
-
-    <!-- BACK TO HOME -->
-
-    <a href="{{ url_for('home') }}"
-       class="back">
-
-        ← Back to Home
-
-    </a>
-
-</div>
-
+    <a href="{{ url_for('home') }}" class="back">← Back to BusTrack</a>
+  </main>
 </body>
-
 </html>
