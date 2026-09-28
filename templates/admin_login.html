@@ -1,81 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Admin Login</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>Admin Portal | BusTrack</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body class="login-page">
-
-<div class="login-container">
-
-    <div class="login-icon">
-        👨‍💼
-    </div>
-
-    <h2>Admin Login</h2>
-
-    <p class="login-subtitle">
-        Login to Admin Dashboard
-    </p>
-
-
+  <main class="login-container">
+    <div class="login-icon">👨‍💼</div>
+    <h2>Admin Portal</h2>
+    <p class="login-subtitle">Secure access to the transport control room.</p>
     {% with messages = get_flashed_messages() %}
-
-        {% if messages %}
-
-            <div class="alert">
-                {{ messages[0] }}
-            </div>
-
-        {% endif %}
-
+      {% if messages %}<div class="alert">{{ messages[0] }}</div>{% endif %}
     {% endwith %}
-
-
-    <form method="POST">
-
-        <label>Username</label>
-
-        <input
-            type="text"
-            name="username"
-            placeholder="Enter username"
-            required
-        >
-
-
-        <label>Password</label>
-
-        <input
-            type="password"
-            name="password"
-            placeholder="Enter password"
-            required
-        >
-
-
-        <button type="submit" class="btn admin-btn">
-            Login
-        </button>
-
+    <form method="POST" action="{{ url_for('admin_login') }}">
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter admin username" required>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" required>
+      <button type="submit" class="btn admin-btn">Sign in to Admin</button>
     </form>
-
-
-    <a href="/" class="back">
-        ← Back to Home
-    </a>
-
-</div>
-
+    <a href="{{ url_for('home') }}" class="back">← Back to BusTrack</a>
+  </main>
 </body>
-
 </html>
