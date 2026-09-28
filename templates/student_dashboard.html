@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard | College Bus Tracking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<!-- ==========================================
+     NAVIGATION BAR
+========================================== -->
+
+<nav class="dashboard-nav">
+
+    <h2>🎓 Student Dashboard</h2>
+
+    <a href="{{ url_for('logout') }}">
+        Logout
+    </a>
+
+</nav>
+
+
+<!-- ==========================================
+     MAIN CONTAINER
+========================================== -->
+
+<div class="dashboard-container">
+
+    <h1>
+        Welcome,
+        {{ student.get("name", "Student") if student else "Student" }}
+    </h1>
+
+    <p>
+        College Bus Tracking System
+    </p>
+
+
+    <!-- ==========================================
+         STUDENT PROFILE
+    ========================================== -->
+
+    <div class="profile-card">
+
+        <h2>👨‍🎓 Student Information</h2>
+
+        {% if student %}
+
+        <p>
+            <strong>Name:</strong>
+            {{ student.get("name", "Not Available") }}
+        </p>
+
+        <p>
+            <strong>Register Number:</strong>
+            {{ student.get("register_no", "Not Available") }}
+        </p>
+
+        <p>
+            <strong>Phone Number:</strong>
+            {{ student.get("phone", "Not Available") }}
+        </p>
+
+        <p>
+            <strong>Bus Number:</strong>
+            {{ student.get("bus_number", "Not Assigned") }}
+        </p>
+
+        <p>
+            <strong>Route:</strong>
+            {{ student.get("route", "Not Assigned") }}
+        </p>
+
+        {% else %}
+
+        <p>
+            Student information not available.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ==========================================
+         DASHBOARD FEATURES
+    ========================================== -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- LIVE LOCATION -->
+
+        <a href="{{ url_for('bus_tracking') }}"
+           class="dashboard-card">
+
+            <span>📍</span>
+
+            <h3>Live Location Tracking</h3>
+
+            <p>
+                Track your college bus live using
+                GPS and Google Maps.
+            </p>
+
+        </a>
+
+
+        <!-- BUS DETAILS -->
+
+        <a href="{{ url_for('bus_details') }}"
+           class="dashboard-card">
+
+            <span>🚌</span>
+
+            <h3>View Bus Details</h3>
+
+            <p>
+                View bus number, driver details,
+                capacity and assigned bus.
+            </p>
+
+        </a>
+
+
+        <!-- QR ATTENDANCE -->
+
+        <a href="{{ url_for('qr_attendance') }}"
+           class="dashboard-card">
+
+            <span>📱</span>
+
+            <h3>QR Attendance</h3>
+
+            <p>
+                Scan the QR code to mark your
+                bus attendance.
+            </p>
+
+        </a>
+
+
+        <!-- ROUTE INFORMATION -->
+
+        <a href="{{ url_for('route_information') }}"
+           class="dashboard-card">
+
+            <span>🛣️</span>
+
+            <h3>Route Information</h3>
+
+            <p>
+                View bus route, stops and
+                travel information.
+            </p>
+
+        </a>
+
+
+        <!-- COMPLAINT -->
+
+        <a href="{{ url_for('student_complaint') }}"
+           class="dashboard-card">
+
+            <span>📝</span>
+
+            <h3>Submit Complaint</h3>
+
+            <p>
+                Report any problem related to
+                the college bus service.
+            </p>
+
+        </a>
+
+
+    </div>
+
+
+    <!-- ==========================================
+         BUS STATUS
+    ========================================== -->
+
+    <div class="profile-card">
+
+        <h2>🚌 Bus Status</h2>
+
+        <p>
+            <strong>Bus Number:</strong>
+
+            {% if student %}
+                {{ student.get("bus_number", "Not Assigned") }}
+            {% else %}
+                Not Assigned
+            {% endif %}
+
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+
+            <span class="status-active">
+                ● Available
+            </span>
+
+        </p>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QR Attendance</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<nav class="dashboard-nav">
+
+    <h2>📱 QR Attendance</h2>
+
+    <a href="{{ url_for('student_dashboard') }}">
+        Dashboard
+    </a>
+
+</nav>
+
+<div class="dashboard-container">
+
+    <div class="profile-card">
+
+        <h2>Bus Attendance</h2>
+
+        {% if student %}
+
+        <p>
+            <strong>Student:</strong>
+            {{ student.get("name", "Student") }}
+        </p>
+
+        <p>
+            <strong>Register Number:</strong>
+            {{ student.get("register_no", "Not Available") }}
+        </p>
+
+        {% endif %}
+
+        <h3>Scan QR Code</h3>
+
+        <p>
+            Scan the QR code inside the bus
+            to mark your attendance.
+        </p>
+
+        <div class="qr-box">
+
+            📷
+
+        </div>
+
+        <button class="btn student-btn"
+                onclick="alert('QR Scanner will be added here.')">
+
+            Scan QR Code
+
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+</html>

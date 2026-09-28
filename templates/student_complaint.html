@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Submit Complaint</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<nav class="dashboard-nav">
+
+    <h2>📝 Student Complaint</h2>
+
+    <a href="{{ url_for('student_dashboard') }}">
+        Dashboard
+    </a>
+
+</nav>
+
+<div class="dashboard-container">
+
+    <div class="profile-card">
+
+        <h2>Submit Bus Complaint</h2>
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                <div class="alert">
+                    {{ messages[0] }}
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+        <form method="POST">
+
+            <label for="message">
+                Complaint
+            </label>
+
+            <textarea
+                id="message"
+                name="message"
+                rows="6"
+                placeholder="Enter your complaint..."
+                required>
+            </textarea>
+
+            <br><br>
+
+            <button type="submit"
+                    class="btn student-btn">
+
+                Submit Complaint
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

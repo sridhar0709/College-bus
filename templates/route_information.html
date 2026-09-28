@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Route Information</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<nav class="dashboard-nav">
+
+    <h2>🛣️ Route Information</h2>
+
+    <a href="{{ url_for('student_dashboard') }}">
+        Dashboard
+    </a>
+
+</nav>
+
+<div class="dashboard-container">
+
+    <h1>My Bus Route</h1>
+
+    <div class="profile-card">
+
+        {% if route %}
+
+        <p>
+            <strong>Route:</strong>
+            {{ route.get("route_name", "Not Available") }}
+        </p>
+
+        <p>
+            <strong>Starting Point:</strong>
+            {{ route.get("start_point", "Not Available") }}
+        </p>
+
+        <p>
+            <strong>Destination:</strong>
+            {{ route.get("destination", "Not Available") }}
+        </p>
+
+        <h3>📍 Bus Stops</h3>
+
+        {% if route.get("stops") %}
+
+        <ul>
+
+            {% for stop in route.get("stops") %}
+
+            <li>{{ stop }}</li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% else %}
+
+        <p>No bus stops available.</p>
+
+        {% endif %}
+
+        {% else %}
+
+        <p>Route information is not available.</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Login | College Bus Tracking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="login-page">
+
+<div class="login-container">
+
+    <!-- ICON -->
+
+    <div class="login-icon">
+        🎓
+    </div>
+
+    <!-- TITLE -->
+
+    <h2>Student Login</h2>
+
+    <p class="login-subtitle">
+        Login to Student Dashboard
+    </p>
+
+
+    <!-- FLASH MESSAGE -->
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            <div class="alert">
+                {{ messages[0] }}
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- LOGIN FORM -->
+
+    <form method="POST"
+          action="{{ url_for('student_login') }}">
+
+        <!-- REGISTER NUMBER -->
+
+        <label for="register_no">
+            Register Number
+        </label>
+
+        <input
+            type="text"
+            id="register_no"
+            name="register_no"
+            placeholder="Enter register number"
+            required
+        >
+
+
+        <!-- PASSWORD -->
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter password"
+            required
+        >
+
+
+        <!-- LOGIN BUTTON -->
+
+        <button type="submit"
+                class="btn student-btn">
+
+            Login
+
+        </button>
+
+    </form>
+
+
+    <!-- BACK TO HOME -->
+
+    <a href="{{ url_for('home') }}"
+       class="back">
+
+        ← Back to Home
+
+    </a>
+
+</div>
+
+</body>
+
+</html>

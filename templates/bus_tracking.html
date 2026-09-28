@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Live Bus Tracking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<nav class="dashboard-nav">
+
+    <h2>📍 Live Bus Tracking</h2>
+
+    <a href="{{ url_for('student_dashboard') }}">
+        Dashboard
+    </a>
+
+</nav>
+
+<div class="dashboard-container">
+
+    <h1>🚌 Live Bus Location</h1>
+
+    {% if student %}
+
+    <div class="profile-card">
+
+        <h2>Student Information</h2>
+
+        <p>
+            <strong>Name:</strong>
+            {{ student.get("name", "Not Available") }}
+        </p>
+
+        <p>
+            <strong>Register Number:</strong>
+            {{ student.get("register_no", "Not Available") }}
+        </p>
+
+        <p>
+            <strong>Bus Number:</strong>
+            {{ student.get("bus_number", "Not Assigned") }}
+        </p>
+
+    </div>
+
+    {% endif %}
+
+    <div class="profile-card">
+
+        <h2>📍 GPS Location</h2>
+
+        <p>
+            Live bus tracking will be displayed here
+            using GPS and Google Maps.
+        </p>
+
+        <div id="map"
+             style="width:100%; height:400px;">
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

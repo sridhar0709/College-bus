@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Driver Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<nav class="dashboard-nav">
+
+    <h2>👨‍✈️ Driver Dashboard</h2>
+
+    <a href="{{ url_for('logout') }}">
+        Logout
+    </a>
+
+</nav>
+
+
+<div class="dashboard-container">
+
+    <h1>Welcome Driver</h1>
+
+
+    <div class="profile-card">
+
+        <h2>Driver Information</h2>
+
+        {% if driver %}
+
+        <p>
+            <strong>Name:</strong>
+            {{ driver.get("name", "Not Available") }}
+        </p>
+
+        <p>
+            <strong>Driver ID:</strong>
+            {{ driver.get("driver_id", "Not Available") }}
+        </p>
+
+        <p>
+            <strong>Phone:</strong>
+            {{ driver.get("phone", "Not Available") }}
+        </p>
+
+        <p>
+            <strong>Bus Number:</strong>
+            {{ driver.get("bus_number", "Not Assigned") }}
+        </p>
+
+        <p>
+            <strong>Route:</strong>
+            {{ driver.get("route", "Not Assigned") }}
+        </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+            <span>🚌</span>
+
+            <h3>My Bus</h3>
+
+            <p>
+                View assigned bus information.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <span>📍</span>
+
+            <h3>GPS Location</h3>
+
+            <p>
+                Update and manage bus location.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <span>📝</span>
+
+            <h3>Complaints</h3>
+
+            <p>
+                Submit transportation complaints.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ==========================================
+     DRIVER LIVE GPS
+========================================== -->
+
+<div class="card">
+
+    <h2>📍 Live Bus GPS</h2>
+
+    <p id="gpsStatus">
+        🔄 Starting GPS...
+    </p>
+
+    <p>
+        <strong>Latitude:</strong>
+        <span id="latitude">-</span>
+    </p>
+
+    <p>
+        <strong>Longitude:</strong>
+        <span id="longitude">-</span>
+    </p>
+
+</div>
+<script>
+
+function startDriverGPS() {
+
+    if (!navigator.geolocation) {
+
+        document.getElementById("gpsStatus").textContent =
+            "❌ GPS is not supported by this browser.";
+
+        return;
+    }
+
+    document.getElementById("gpsStatus").textContent =
+        "🔄 Requesting GPS permission...";
+
+
+    navigator.geolocation.watchPosition(
+
+        function(position) {
+
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+
+            document.getElementById("latitude").textContent =
+                latitude.toFixed(6);
+
+            document.getElementById("longitude").textContent =
+                longitude.toFixed(6);
+
+            document.getElementById("gpsStatus").textContent =
+                "🟢 GPS location is active";
+
+
+            fetch("/api/update_location", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    latitude: latitude,
+                    longitude: longitude
+                })
+
+            })
+
+            .then(function(response) {
+                return response.json();
+            })
+
+            .then(function(data) {
+
+                console.log("GPS Server Response:", data);
+
+            })
+
+            .catch(function(error) {
+
+                console.error("GPS update error:", error);
+
+                document.getElementById("gpsStatus").textContent =
+                    "🔴 Failed to send GPS location.";
+
+            });
+
+        },
+
+        function(error) {
+
+            console.error("GPS Error:", error);
+
+            document.getElementById("gpsStatus").textContent =
+                "❌ Unable to get GPS location.";
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+
+    );
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    startDriverGPS();
+
+});
+
+</script>
+
+</body>
+
+</html>

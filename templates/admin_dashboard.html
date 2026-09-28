@@ -1,0 +1,2943 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | College Bus Tracking</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: linear-gradient(
+                180deg,
+                #101828,
+                #18263d
+            );
+            color: white;
+            padding: 22px 15px;
+            z-index: 1000;
+            transition: 0.3s;
+            overflow-y: auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 10px 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .brand h2 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .brand span {
+            display: block;
+            color: #9ca9bc;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .menu-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.3px;
+            color: #718096;
+            padding: 25px 12px 9px;
+        }
+
+        .nav-item {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #cbd5e1;
+            padding: 12px 13px;
+            margin: 3px 0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .logout {
+            margin-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 18px;
+        }
+
+        .logout a {
+            text-decoration: none;
+            color: #fca5a5;
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            transition: 0.3s;
+        }
+
+        /* =====================================================
+           TOPBAR
+        ===================================================== */
+
+        .topbar {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e6eaf0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .page-title h1 {
+            font-size: 21px;
+            color: #172033;
+        }
+
+        .page-title p {
+            color: #7b8798;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-icon {
+            width: 38px;
+            height: 38px;
+            background: #e8f0ff;
+            color: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .admin-profile strong {
+            font-size: 13px;
+        }
+
+        .admin-profile small {
+            display: block;
+            color: #8b95a5;
+            font-size: 11px;
+        }
+
+        .menu-btn {
+            display: none;
+            border: none;
+            background: #eef4ff;
+            color: #2563eb;
+            font-size: 22px;
+            padding: 8px 11px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           CONTENT
+        ===================================================== */
+
+        .content {
+            padding: 28px 30px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 19px;
+        }
+
+        .section-heading p {
+            color: #7b8798;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* =====================================================
+           STAT CARDS
+        ===================================================== */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-radius: 15px;
+            padding: 19px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.25s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(20,40,80,0.08);
+        }
+
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            right: -22px;
+            bottom: -22px;
+            width: 70px;
+            height: 70px;
+            background: #eef4ff;
+            border-radius: 50%;
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #eef4ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            font-size: 17px;
+        }
+
+        .stat-card h3 {
+            font-size: 25px;
+            margin-bottom: 4px;
+        }
+
+        .stat-card p {
+            color: #7b8798;
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           CARDS
+        ===================================================== */
+
+        .card {
+            background: white;
+            border: 1px solid #e6eaf0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 17px;
+        }
+
+        .card-header h3 {
+            font-size: 16px;
+        }
+
+        .card-header span {
+            color: #8792a3;
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th {
+            background: #f7f9fc;
+            color: #697586;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e6eaf0;
+        }
+
+        td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #eef1f5;
+            font-size: 13px;
+            color: #344054;
+        }
+
+        tr:hover td {
+            background: #fafcff;
+        }
+
+        /* =====================================================
+           SEARCH
+        ===================================================== */
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 220px;
+            padding: 10px 13px;
+            border: 1px solid #dce2ea;
+            border-radius: 9px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        .search-box input:focus {
+            border-color: #2563eb;
+        }
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .btn {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-danger:hover {
+            background: #fecaca;
+        }
+
+        /* =====================================================
+           BADGES
+        ===================================================== */
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        /* =====================================================
+           ADD BUS FORM
+        ===================================================== */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #344054;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #dce2ea;
+            border-radius: 8px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .form-group input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+        }
+
+        .form-actions {
+            margin-top: 20px;
+        }
+
+        /* =====================================================
+           GPS
+        ===================================================== */
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .location-card {
+            border: 1px solid #e6eaf0;
+            border-radius: 12px;
+            padding: 16px;
+            background: #fbfcff;
+        }
+
+        .location-card h4 {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .location-card p {
+            color: #667085;
+            font-size: 12px;
+            margin: 6px 0;
+        }
+
+        /* =====================================================
+           FLASH MESSAGE
+        ===================================================== */
+
+        .flash-container {
+            margin-bottom: 18px;
+        }
+
+        .flash {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 11px 14px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #98a2b3;
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           OVERLAY
+        ===================================================== */
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.45);
+            z-index: 999;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1300px) {
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .location-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .overlay.show {
+                display: block;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .content {
+                padding: 20px 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .location-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-profile > div:last-child {
+                display: none;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                gap: 12px;
+                flex-direction: column;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-card h3 {
+                font-size: 21px;
+            }
+        }
+
+.location-map-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+#map {
+    width: 100%;
+    height: 550px;
+    border-radius: 12px;
+}
+
+#location-status {
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     MOBILE OVERLAY
+========================================================= -->
+
+<div class="overlay" id="overlay"></div>
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🚌
+        </div>
+
+        <div>
+            <h2>BusTrack</h2>
+            <span>College Transport System</span>
+        </div>
+
+    </div>
+
+
+    <div class="menu-title">
+        Main Menu
+    </div>
+
+
+    <button class="nav-item active"
+            onclick="showSection('dashboard', this)">
+
+        <span class="nav-icon">▦</span>
+        Dashboard
+
+    </button>
+
+
+    <button class="nav-item"
+            onclick="showSection('students', this)">
+
+        <span class="nav-icon">👨‍🎓</span>
+        Students
+
+    </button>
+
+
+    <button class="nav-item"
+            onclick="showSection('parents', this)">
+
+        <span class="nav-icon">👨‍👩‍👧</span>
+        Parents
+
+    </button>
+
+
+    <button class="nav-item"
+            onclick="showSection('drivers', this)">
+
+        <span class="nav-icon">👨‍✈️</span>
+        Drivers
+
+    </button>
+
+
+    <button class="nav-item"
+            onclick="showSection('buses', this)">
+
+        <span class="nav-icon">🚌</span>
+        Bus Management
+
+    </button>
+
+
+    <div class="menu-title">
+        Monitoring
+    </div>
+
+
+    <button class="nav-item"
+            onclick="showSection('locations', this)">
+
+        <span class="nav-icon">📍</span>
+        Live GPS
+
+    </button>
+
+
+    <button class="nav-item"
+            onclick="showSection('complaints', this)">
+
+        <span class="nav-icon">⚠</span>
+        Complaints
+
+    </button>
+
+
+    <button class="nav-item"
+            onclick="showSection('attendance', this)">
+
+        <span class="nav-icon">✓</span>
+        QR Attendance
+
+    </button>
+
+
+    <div class="logout">
+
+        <a href="{{ url_for('admin_login') }}"
+           class="nav-item">
+
+            <span class="nav-icon">↪</span>
+            Logout
+
+        </a>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="main">
+
+
+    <!-- =====================================================
+         TOPBAR
+    ====================================================== -->
+
+    <header class="topbar">
+
+        <div style="display:flex;align-items:center;gap:12px;">
+
+            <button class="menu-btn"
+                    id="menuBtn">
+                ☰
+            </button>
+
+            <div class="page-title">
+
+                <h1 id="pageTitle">
+                    Admin Dashboard
+                </h1>
+
+                <p>
+                    College Bus Tracking System
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-profile">
+
+            <div class="profile-icon">
+                A
+            </div>
+
+            <div>
+
+                <strong>
+                    {{ session.get("admin", "Administrator") }}
+                </strong>
+
+                <small>
+                    System Administrator
+                </small>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         CONTENT
+    ====================================================== -->
+
+    <div class="content">
+
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                <div class="flash-container">
+
+                    {% for message in messages %}
+
+                        <div class="flash">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+
+        <!-- =================================================
+             DASHBOARD
+        ================================================== -->
+
+        <section id="dashboard"
+                 class="section active">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Overview</h2>
+
+                    <p>
+                        Monitor your college transportation system.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        👨‍🎓
+                    </div>
+
+                    <h3>
+                        {{ student_count }}
+                    </h3>
+
+                    <p>
+                        Total Students
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        👨‍👩‍👧
+                    </div>
+
+                    <h3>
+                        {{ parent_count }}
+                    </h3>
+
+                    <p>
+                        Total Parents
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        👨‍✈️
+                    </div>
+
+                    <h3>
+                        {{ driver_count }}
+                    </h3>
+
+                    <p>
+                        Total Drivers
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🚌
+                    </div>
+
+                    <h3>
+                        {{ bus_count }}
+                    </h3>
+
+                    <p>
+                        Total Buses
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                    <h3>
+                        {{ attendance_count }}
+                    </h3>
+
+                    <p>
+                        QR Attendance
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ⚠
+                    </div>
+
+                    <h3>
+                        {{ complaint_count }}
+                    </h3>
+
+                    <p>
+                        Complaints
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>System Summary</h3>
+                        <span>Quick access to management modules</span>
+                    </div>
+
+                </div>
+
+
+                <div class="location-grid">
+
+                    <div class="location-card">
+
+                        <h4>Student Management</h4>
+
+                        <p>
+                            View registered student information.
+                        </p>
+
+                        <button class="btn btn-primary"
+                                onclick="activateById('students')">
+
+                            View Students
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="location-card">
+
+                        <h4>Bus Management</h4>
+
+                        <p>
+                            Add, monitor and remove buses.
+                        </p>
+
+                        <button class="btn btn-primary"
+                                onclick="activateById('buses')">
+
+                            Manage Buses
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="location-card">
+
+                        <h4>Live GPS</h4>
+
+                        <p>
+                            Monitor recently received bus locations.
+                        </p>
+
+                        <button class="btn btn-primary"
+                                onclick="activateById('locations')">
+
+                            Track Buses
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STUDENTS
+        ================================================== -->
+
+        <!-- =================================================
+     STUDENT MANAGEMENT
+================================================== -->
+
+<section id="students"
+         class="section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>Student Details</h2>
+
+            <p>
+                Registered students in the system.
+            </p>
+
+            <br>
+
+            <button class="btn btn-primary"
+                    onclick="showAddStudent()">
+
+                + Add New Student
+
+            </button>
+
+        </div>
+
+
+        <div class="search-box">
+
+            <input type="text"
+                   placeholder="Search Student ..."
+                   onkeyup="filterTable(this, 'StudentTable')">
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ADD STUDENT
+    ================================================== -->
+
+    <div class="card"
+         id="addStudentCard"
+         style="display:none;">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>Add Student Details</h3>
+
+                <span>
+                    Register a new student.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <form method="POST"
+              action="{{ url_for('add_student') }}">
+
+            <div class="form-grid">
+
+
+                <!-- REGISTER NUMBER -->
+
+                <div class="form-group">
+
+                    <label>
+                        Register Number
+                    </label>
+
+                    <input type="text"
+                           name="register_no"
+                           placeholder="Example: 23CSE001"
+                           required>
+
+                </div>
+
+
+                <!-- STUDENT NAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Student Name
+                    </label>
+
+                    <input type="text"
+                           name="name"
+                           placeholder="Student name"
+                           required>
+
+                </div>
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="form-group">
+
+                    <label>
+                        Department
+                    </label>
+
+                    <input type="text"
+                           name="department"
+                           placeholder="Example: CSE"
+                           required>
+
+                </div>
+
+
+                <!-- YEAR -->
+
+                <div class="form-group">
+
+                    <label>
+                        Year
+                    </label>
+
+                    <input type="text"
+                           name="year"
+                           placeholder="Example: 3rd Year"
+                           required>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Phone
+                    </label>
+
+                    <input type="tel"
+                           name="phone"
+                           placeholder="Student phone number"
+                           required>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input type="email"
+                           name="email"
+                           placeholder="Student email">
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input type="password"
+                           name="password"
+                           placeholder="Student password"
+                           required>
+
+                </div>
+
+
+                <!-- BUS NUMBER -->
+
+                <div class="form-group">
+
+                    <label>
+                        Bus Number
+                    </label>
+
+                    <input type="text"
+                           name="bus_number"
+                           placeholder="Example: A-15">
+
+                </div>
+
+
+                <!-- ROUTE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Route
+                    </label>
+
+                    <input type="text"
+                           name="route"
+                           placeholder="Example: Salem - College">
+
+                </div>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Save Student
+
+                </button>
+
+
+                <button type="button"
+                        class="btn"
+                        onclick="hideAddStudent()">
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- =================================================
+         STUDENT TABLE
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>Registered Students</h3>
+
+                <span>
+                    {{ student_count }} students available
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table id="StudentTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Register No</th>
+
+                        <th>Name</th>
+
+                        <th>Department</th>
+
+                        <th>Year</th>
+
+                        <th>Phone</th>
+
+                        <th>Email</th>
+
+                        <th>Bus</th>
+
+                        <th>Route</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for student in students|default([]) %}
+
+                    <tr>
+
+                        <td>
+                            {{ loop.index }}
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                {{ student.get("register_no", "-") }}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+                            {{ student.get("name", "-") }}
+                        </td>
+
+
+                        <td>
+                            {{ student.get("department", "-") }}
+                        </td>
+
+
+                        <td>
+                            {{ student.get("year", "-") }}
+                        </td>
+
+
+                        <td>
+                            {{ student.get("phone", "-") }}
+                        </td>
+
+
+                        <td>
+                            {{ student.get("email", "-") }}
+                        </td>
+
+
+                        <td>
+                            {{ student.get("bus_number", "-") }}
+                        </td>
+
+
+                        <td>
+                            {{ student.get("route", "-") }}
+                        </td>
+
+
+                        <td>
+
+                            {% if student.get("_id") %}
+
+                            <a href="{{ url_for('delete_student', student_id=student['_id']) }}"
+                               class="btn btn-danger"
+                               onclick="return confirm('Are you sure you want to delete this student?');">
+
+                                Delete
+
+                            </a>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="10"
+                            class="empty">
+
+                            No students available.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+       <!-- =================================================
+     PARENT MANAGEMENT
+================================================== -->
+
+<section id="parents"
+         class="section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>Parent Management</h2>
+
+            <br>
+
+            <button class="btn btn-primary"
+                    onclick="showAddParent()">
+
+                + Add New Parent
+
+            </button>
+
+        </div>
+
+
+        <div class="search-box">
+
+            <input type="text"
+                   placeholder="Search Parent ..."
+                   onkeyup="filterTable(this, 'ParentTable')">
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ADD PARENT
+    ================================================== -->
+
+    <div class="card"
+         id="addParentCard"
+         style="display:none;">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>Add Parent Details</h3>
+
+                <span>
+                    Register a new parent.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <form method="POST"
+              action="{{ url_for('add_parent') }}">
+
+            <div class="form-grid">
+
+
+                <!-- PARENT NAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Parent Name
+                    </label>
+
+                    <input type="text"
+                           name="name"
+                           placeholder="Parent name"
+                           required>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Phone Number
+                    </label>
+
+                    <input type="tel"
+                           name="phone_number"
+                           placeholder="Parent phone number"
+                           required>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input type="email"
+                           name="email"
+                           placeholder="Parent email">
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input type="password"
+                           name="password"
+                           placeholder="Password"
+                           required>
+
+                </div>
+
+
+                <!-- STUDENT REGISTER NUMBER -->
+
+                <div class="form-group">
+
+                    <label>
+                        Student Register Number
+                    </label>
+
+                    <input type="text"
+                           name="student_register_no"
+                           placeholder="Example: STU001"
+                           required>
+
+                </div>
+
+
+                <!-- RELATIONSHIP -->
+
+                <div class="form-group">
+
+                    <label>
+                        Relationship
+                    </label>
+
+                    <input type="text"
+                           name="relationship"
+                           placeholder="Example: Father / Mother">
+
+                </div>
+
+
+                <!-- ADDRESS -->
+
+                <div class="form-group">
+
+                    <label>
+                        Address
+                    </label>
+
+                    <input type="text"
+                           name="address"
+                           placeholder="Parent address">
+
+                </div>
+
+
+            </div>
+
+
+            <!-- FORM BUTTONS -->
+
+            <div class="form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Save Parent
+
+                </button>
+
+
+                <button type="button"
+                        class="btn"
+                        onclick="hideAddParent()">
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- =================================================
+         REGISTERED PARENTS
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>Registered Parents</h3>
+
+                <span>
+                    {{ parent_count }} parents available
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table id="ParentTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Name</th>
+
+                        <th>Phone</th>
+
+                        <th>Email</th>
+
+                        <th>Student Register No</th>
+
+                        <th>Relationship</th>
+
+                        <th>Address</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% for parent in parents|default([]) %}
+
+                    <tr>
+
+
+                        <!-- NUMBER -->
+
+                        <td>
+                            {{ loop.index }}
+                        </td>
+
+
+                        <!-- NAME -->
+
+                        <td>
+
+                            <strong>
+                                {{ parent.get("name", "-") }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- PHONE -->
+
+                        <td>
+
+                            {{ parent.get(
+                                "phone_number",
+                                parent.get("phone", "-")
+                            ) }}
+
+                        </td>
+
+
+                        <!-- EMAIL -->
+
+                        <td>
+
+                            {{ parent.get(
+                                "email",
+                                "-"
+                            ) }}
+
+                        </td>
+
+
+                        <!-- STUDENT REGISTER NO -->
+
+                        <td>
+
+                            {{ parent.get(
+                                "student_register_no",
+                                parent.get("register_no", "-")
+                            ) }}
+
+                        </td>
+
+
+                        <!-- RELATIONSHIP -->
+
+                        <td>
+
+                            {{ parent.get(
+                                "relationship",
+                                "-"
+                            ) }}
+
+                        </td>
+
+
+                        <!-- ADDRESS -->
+
+                        <td>
+
+                            {{ parent.get(
+                                "address",
+                                "-"
+                            ) }}
+
+                        </td>
+
+
+                        <!-- DELETE -->
+
+                        <td>
+
+                            {% if parent.get("_id") %}
+
+                            <a href="{{ url_for(
+                                'delete_parent',
+                                parent_id=parent['_id']
+                            ) }}"
+                               class="btn btn-danger"
+                               onclick="return confirm(
+                                   'Are you sure you want to delete this parent?'
+                               );">
+
+                                Delete
+
+                            </a>
+
+                            {% endif %}
+
+                        </td>
+
+
+                    </tr>
+
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="8"
+                            class="empty">
+
+                            No parents available.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+        <!-- =================================================
+     DRIVER MANAGEMENT
+================================================== -->
+
+<section id="drivers"
+         class="section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>Driver Management</h2>
+
+            <br>
+
+            <button class="btn btn-primary"
+                    onclick="showAddDriver()">
+
+                + Add New Driver
+
+            </button>
+
+        </div>
+
+
+        <div class="search-box">
+
+            <input type="text"
+                   placeholder="Search Driver ..."
+                   onkeyup="filterTable(this, 'DriverTable')">
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ADD DRIVER
+    ================================================== -->
+
+    <div class="card"
+         id="addDriverCard"
+         style="display:none;">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>Add Driver Details</h3>
+
+                <span>
+                    Register a new college bus driver.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <form method="POST"
+              action="{{ url_for('add_driver') }}">
+
+            <div class="form-grid">
+
+
+                <!-- DRIVER NAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Driver Name
+                    </label>
+
+                    <input type="text"
+                           name="name"
+                           placeholder="Driver name"
+                           required>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Phone Number
+                    </label>
+
+                    <input type="tel"
+                           name="phone"
+                           placeholder="Driver phone number"
+                           required>
+
+                </div>
+
+
+                <!-- LICENSE -->
+
+                <div class="form-group">
+
+                    <label>
+                        License Number
+                    </label>
+
+                    <input type="text"
+                           name="license"
+                           placeholder="Driving license number"
+                           required>
+
+                </div>
+
+
+                <!-- BUS NUMBER -->
+
+                <div class="form-group">
+
+                    <label>
+                        Bus Number
+                    </label>
+
+                    <input type="text"
+                           name="bus_number"
+                           placeholder="Example: A-15">
+
+                </div>
+
+
+                <!-- EXPERIENCE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Experience
+                    </label>
+
+                    <input type="text"
+                           name="experience"
+                           placeholder="Example: 5 Years">
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input type="password"
+                           name="password"
+                           placeholder="Driver login password"
+                           required>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- FORM BUTTONS -->
+
+            <div class="form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Save Driver
+
+                </button>
+
+
+                <button type="button"
+                        class="btn"
+                        onclick="hideAddDriver()">
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- =================================================
+         REGISTERED DRIVERS
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>Registered Drivers</h3>
+
+                <span>
+                    {{ driver_count }} drivers available
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table id="DriverTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Name</th>
+
+                        <th>Phone</th>
+
+                        <th>License</th>
+
+                        <th>Bus Number</th>
+
+                        <th>Experience</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for driver in drivers|default([]) %}
+
+                    <tr>
+
+                        <!-- NUMBER -->
+
+                        <td>
+                            {{ loop.index }}
+                        </td>
+
+
+                        <!-- NAME -->
+
+                        <td>
+
+                            <strong>
+                                {{ driver.get("name", "-") }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- PHONE -->
+
+                        <td>
+
+                            {{ driver.get(
+                                "phone",
+                                driver.get("phone_number", "-")
+                            ) }}
+
+                        </td>
+
+
+                        <!-- LICENSE -->
+
+                        <td>
+
+                            {{ driver.get(
+                                "license",
+                                driver.get("license_number", "-")
+                            ) }}
+
+                        </td>
+
+
+                        <!-- BUS NUMBER -->
+
+                        <td>
+
+                            {{ driver.get(
+                                "bus_number",
+                                "-"
+                            ) }}
+
+                        </td>
+
+
+                        <!-- EXPERIENCE -->
+
+                        <td>
+
+                            {{ driver.get(
+                                "experience",
+                                "-"
+                            ) }}
+
+                        </td>
+
+
+                        <!-- DELETE -->
+
+                        <td>
+
+                            {% if driver.get("_id") %}
+
+                            <a href="{{ url_for(
+                                'delete_driver',
+                                driver_id=driver['_id']
+                            ) }}"
+                               class="btn btn-danger"
+                               onclick="return confirm(
+                                   'Are you sure you want to delete this driver?'
+                               );">
+
+                                Delete
+
+                            </a>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="7"
+                            class="empty">
+
+                            No drivers available.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+        <!-- =================================================
+             BUS MANAGEMENT
+        ================================================== -->
+
+        <section id="buses"
+                 class="section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Bus Management</h2>   <br>
+
+                   
+                    <button class="btn btn-primary"
+                        onclick="showAddBus()">
+
+                    + Add New Bus
+
+                </button>
+
+                </div>
+
+
+                <div class="search-box">
+
+                    <input type="text"
+                           placeholder="Search Bus ..."
+                           onkeyup="filterTable(this, 'BusTable')">
+
+                </div>
+
+            </div>
+
+
+            <!-- ADD BUS -->
+
+            <div class="card"
+                 id="addBusCard"
+                 style="display:none;">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>Add Bus Details</h3>
+
+                        <span>
+                            Register a new college bus.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <form method="POST"
+                      action="{{ url_for('add_bus') }}">
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Bus Number
+                            </label>
+
+                            <input type="text"
+                                   name="bus_number"
+                                   placeholder="Example: TN-30-A-1234"
+                                   required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Bus Name
+                            </label>
+
+                            <input type="text"
+                                   name="bus_name"
+                                   placeholder="Example: College Bus 01"
+                                   required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Driver Name
+                            </label>
+
+                            <input type="text"
+                                   name="driver_name"
+                                   placeholder="Driver name"
+                                   required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Driver Phone
+                            </label>
+
+                            <input type="tel"
+                                   name="driver_phone"
+                                   placeholder="Driver phone number">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Capacity
+                            </label>
+
+                            <input type="number"
+                                   name="capacity"
+                                   placeholder="Example: 50"
+                                   min="1">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Route
+                            </label>
+
+                            <input type="text"
+                                   name="route"
+                                   placeholder="Example: Salem - College">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            Save Bus
+
+                        </button>
+
+                        <button type="button"
+                                class="btn"
+                                onclick="hideAddBus()">
+
+                            Cancel
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- BUS TABLE -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>Registered Buses</h3>
+
+                        <span>
+                            {{ bus_count }} buses available
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>#</th>
+                                <th>Bus Number</th>
+                                <th>Bus Name</th>
+                                <th>Driver</th>
+                                <th>Phone</th>
+                                <th>Capacity</th>
+                                <th>Route</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for bus in buses|default([]) %}
+
+                            <tr>
+
+                                <td>
+                                    {{ loop.index }}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        {{ bus.get("bus_number", "-") }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ bus.get("bus_name", "-") }}
+                                </td>
+
+                                <td>
+                                    {{ bus.get("driver_name", "-") }}
+                                </td>
+
+                                <td>
+                                    {{ bus.get("driver_phone", "-") }}
+                                </td>
+
+                                <td>
+                                    {{ bus.get("capacity", "-") }}
+                                </td>
+
+                                <td>
+                                    {{ bus.get("route", "-") }}
+                                </td>
+
+                                <td>
+
+                                    {% if bus.get("_id") %}
+
+                                    <a href="{{ url_for('delete_bus', bus_id=bus['_id']) }}"
+                                       class="btn btn-danger"
+                                       onclick="return confirm('Are you sure you want to delete this bus?');">
+
+                                        Delete
+
+                                    </a>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% else %}
+
+                            <tr>
+
+                                <td colspan="8"
+                                    class="empty">
+
+                                    No buses available.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+     LIVE GPS
+================================================== -->
+
+<section id="locations"
+         class="section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>Live GPS Location</h2>
+
+            <p>
+                Latest GPS location records received from buses.
+            </p>
+
+        </div>
+
+        <span class="badge badge-success">
+            ● LIVE DATA
+        </span>
+
+    </div>
+
+
+    <!-- ==============================
+         LIVE MAP
+    =============================== -->
+
+    <div class="location-map-card">
+
+        <div id="map"></div>
+
+        <p id="location-status">
+            🔄 Getting latest GPS location...
+        </p>
+
+    </div>
+
+
+    <!-- ==============================
+         GPS DETAILS
+    =============================== -->
+
+    <div class="location-grid">
+
+        {% for location in locations|default([]) %}
+
+            <div class="location-card">
+
+                <h4>
+                    🚌
+                    {{ location.get(
+                        "bus_number",
+                        location.get("bus_id", "Unknown Bus")
+                    ) }}
+                </h4>
+
+                <p>
+                    <strong>Latitude:</strong>
+                    {{ location.get("latitude", "-") }}
+                </p>
+
+                <p>
+                    <strong>Longitude:</strong>
+                    {{ location.get("longitude", "-") }}
+                </p>
+
+                <p>
+                    <strong>Time:</strong>
+                    {{ location.get(
+                        "timestamp",
+                        location.get("time", "-")
+                    ) }}
+                </p>
+
+                {% if location.get("latitude")
+                      and location.get("longitude") %}
+
+                    <a class="btn btn-primary"
+                       target="_blank"
+                       href="https://www.google.com/maps?q={{ location.get('latitude') }},{{ location.get('longitude') }}">
+
+                        View Map
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        {% else %}
+
+            <div class="card"
+                 style="grid-column:1/-1;">
+
+                <div class="empty">
+                    No GPS location records available.
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+        <!-- =================================================
+             COMPLAINTS
+        ================================================== -->
+
+        <section id="complaints"
+                 class="section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Complaints</h2>
+
+                    <p>
+                        Review and update student/parent complaints.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Subject</th>
+                                <th>Complaint</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Update</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for complaint in complaints|default([]) %}
+
+                            <tr>
+
+                                <td>
+                                    {{ loop.index }}
+                                </td>
+
+                                <td>
+                                    {{ complaint.get("name", complaint.get("student_name", complaint.get("parent_name", "-"))) }}
+                                </td>
+
+                                <td>
+                                    {{ complaint.get("subject", "-") }}
+                                </td>
+
+                                <td>
+                                    {{ complaint.get("complaint", complaint.get("message", "-")) }}
+                                </td>
+
+                                <td>
+                                    {{ complaint.get("date", complaint.get("created_at", "-")) }}
+                                </td>
+
+                                <td>
+
+                                    {% set status = complaint.get("status", "Pending") %}
+
+                                    {% if status == "Resolved" %}
+
+                                        <span class="badge badge-success">
+                                            Resolved
+                                        </span>
+
+                                    {% elif status == "In Progress" %}
+
+                                        <span class="badge badge-info">
+                                            In Progress
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge badge-warning">
+                                            Pending
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    {% if complaint.get("_id") %}
+
+                                    <form method="POST"
+                                          action="{{ url_for('update_complaint', complaint_id=complaint['_id']) }}">
+
+                                        <select name="status"
+                                                onchange="this.form.submit()"
+                                                style="padding:7px;border:1px solid #dce2ea;border-radius:7px;font-size:11px;">
+
+                                            <option value="Pending"
+                                                {% if status == "Pending" %}selected{% endif %}>
+                                                Pending
+                                            </option>
+
+                                            <option value="In Progress"
+                                                {% if status == "In Progress" %}selected{% endif %}>
+                                                In Progress
+                                            </option>
+
+                                            <option value="Resolved"
+                                                {% if status == "Resolved" %}selected{% endif %}>
+                                                Resolved
+                                            </option>
+
+                                        </select>
+
+                                    </form>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% else %}
+
+                            <tr>
+
+                                <td colspan="7"
+                                    class="empty">
+
+                                    No complaints found.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ATTENDANCE
+        ================================================== -->
+
+        <section id="attendance"
+                 class="section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>QR Attendance</h2>
+
+                    <p>
+                        Attendance records collected through QR scanning.
+                    </p>
+
+                </div>
+
+                <span class="badge badge-info">
+                    {{ attendance_count }} Records
+                </span>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>#</th>
+                                <th>Student</th>
+                                <th>Register No</th>
+                                <th>Bus</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for record in attendance|default([]) %}
+
+                            <tr>
+
+                                <td>
+                                    {{ loop.index }}
+                                </td>
+
+                                <td>
+                                    {{ record.get("student_name", record.get("name", "-")) }}
+                                </td>
+
+                                <td>
+                                    {{ record.get("register_no", "-") }}
+                                </td>
+
+                                <td>
+                                    {{ record.get("bus_number", "-") }}
+                                </td>
+
+                                <td>
+                                    {{ record.get("date", "-") }}
+                                </td>
+
+                                <td>
+                                    {{ record.get("time", "-") }}
+                                </td>
+
+                                <td>
+
+                                    <span class="badge badge-success">
+                                        {{ record.get("status", "Present") }}
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                        {% else %}
+
+                            <tr>
+
+                                <td colspan="7"
+                                    class="empty">
+
+                                    No attendance records found.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        crossorigin=""></script>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+
+
+
+</body>
+
+</html>

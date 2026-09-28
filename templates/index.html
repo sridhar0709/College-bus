@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>College Bus Tracking System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        🚌 College Bus Tracking System
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>College Bus Tracking System</h1>
+
+        <p>
+            GPS Based Smart College Bus Tracking System
+        </p>
+
+        <p class="subtitle">
+            Track buses, routes and transportation information
+            easily and securely.
+        </p>
+
+
+        <div class="login-buttons">
+
+            <a href="{{ url_for('admin_login') }}"
+               class="login-card admin">
+
+                <span>👨‍💼</span>
+
+                <h3>Admin Login</h3>
+
+                <p>Manage the complete bus system</p>
+
+            </a>
+
+
+            <a href="{{ url_for('student_login') }}"
+               class="login-card student">
+
+                <span>🎓</span>
+
+                <h3>Student Login</h3>
+
+                <p>View bus and route information</p>
+
+            </a>
+
+
+            <a href="{{ url_for('parent_login') }}"
+               class="login-card parent">
+
+                <span>👨‍👩‍👧</span>
+
+                <h3>Parent Login</h3>
+
+                <p>Track your child's college bus</p>
+
+            </a>
+
+
+            <a href="{{ url_for('driver_login') }}"
+               class="login-card driver">
+
+                <span>👨‍✈️</span>
+
+                <h3>Driver Login</h3>
+
+                <p>Manage bus and driver activities</p>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="features">
+
+    <h2>System Features</h2>
+
+    <div class="feature-grid">
+
+        <div class="feature">
+            <h3>📍 GPS Tracking</h3>
+            <p>Track the current location of college buses.</p>
+        </div>
+
+        <div class="feature">
+            <h3>🗺 Google Maps</h3>
+            <p>View bus locations and routes on a map.</p>
+        </div>
+
+        <div class="feature">
+            <h3>🚌 Bus Management</h3>
+            <p>Manage buses, drivers and routes.</p>
+        </div>
+
+        <div class="feature">
+            <h3>🔐 Secure Login</h3>
+            <p>Separate login access for each user type.</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <p>
+        © 2026 College Bus Tracking System
+    </p>
+
+</footer>
+
+
+</body>
+</html>

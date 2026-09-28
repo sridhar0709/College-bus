@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Parent Bus Tracking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <h1>🚌 Live Bus Tracking</h1>
+
+    <hr>
+
+    {% if parent %}
+        <h3>Parent: {{ parent.name }}</h3>
+    {% endif %}
+
+    {% if student %}
+        <p>
+            <strong>Student:</strong>
+            {{ student.name }}
+        </p>
+
+        <p>
+            <strong>Register Number:</strong>
+            {{ student.register_no }}
+        </p>
+    {% endif %}
+
+    {% if bus %}
+
+        <p>
+            <strong>Bus Number:</strong>
+            {{ bus.bus_number }}
+        </p>
+
+        <p>
+            <strong>Bus Name:</strong>
+            {{ bus.bus_name }}
+        </p>
+
+    {% else %}
+
+        <p>No bus assigned to this student.</p>
+
+    {% endif %}
+
+
+    {% if location %}
+
+        <h3>📍 Current Bus Location</h3>
+
+        <p>
+            Latitude:
+            {{ location.latitude }}
+        </p>
+
+        <p>
+            Longitude:
+            {{ location.longitude }}
+        </p>
+
+    {% else %}
+
+        <p>Live location is not available.</p>
+
+    {% endif %}
+
+
+    <br>
+
+    <a href="{{ url_for('parent_dashboard') }}">
+        ← Back to Parent Dashboard
+    </a>
+
+</body>
+
+</html>

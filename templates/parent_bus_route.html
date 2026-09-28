@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bus Route</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <h1>🛣️ Bus Route</h1>
+
+    <div class="profile-card">
+
+        <h2>College Bus Route</h2>
+
+        <p>Starting Point → College</p>
+
+        <p>Stop 1 → Stop 2 → Stop 3 → College</p>
+
+    </div>
+
+    <a href="{{ url_for('parent_dashboard') }}">
+        ← Back to Parent Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

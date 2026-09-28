@@ -1,0 +1,543 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+}
+
+
+/* =================================
+   NAVBAR
+================================= */
+
+.navbar {
+    width: 100%;
+    background: #0d6efd;
+    color: white;
+    padding: 20px 50px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+/* =================================
+   HOME HERO
+================================= */
+
+.hero {
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    background:
+        linear-gradient(
+            rgba(13, 110, 253, 0.85),
+            rgba(0, 60, 140, 0.9)
+        );
+
+    color: white;
+}
+
+.hero-content {
+    width: 90%;
+    max-width: 1100px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 21px;
+}
+
+.subtitle {
+    font-size: 16px !important;
+}
+
+
+/* =================================
+   LOGIN BUTTONS
+================================= */
+
+.login-buttons {
+    display: grid;
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin-top: 40px;
+}
+
+.login-card {
+    background: white;
+    color: #222;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    text-decoration: none;
+
+    transition: 0.3s;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.login-card span {
+    font-size: 40px;
+}
+
+.login-card h3 {
+    margin: 12px 0;
+}
+
+.login-card p {
+    font-size: 14px;
+}
+
+.login-card:hover {
+    transform: translateY(-8px);
+}
+
+
+/* =================================
+   LOGIN COLORS
+================================= */
+
+.admin {
+    border-top: 5px solid #dc3545;
+}
+
+.student {
+    border-top: 5px solid #198754;
+}
+
+.parent {
+    border-top: 5px solid #6f42c1;
+}
+
+.driver {
+    border-top: 5px solid #212529;
+}
+
+
+/* =================================
+   FEATURES
+================================= */
+
+.features {
+    padding: 60px 8%;
+    text-align: center;
+}
+
+.feature-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin-top: 30px;
+}
+
+.feature {
+    background: white;
+    padding: 25px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =================================
+   FOOTER
+================================= */
+
+footer {
+    background: #212529;
+    color: white;
+
+    text-align: center;
+
+    padding: 20px;
+}
+
+
+/* =================================
+   LOGIN PAGE
+================================= */
+
+.login-page {
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0d6efd,
+            #6f42c1
+        );
+}
+
+.login-container {
+    width: 400px;
+
+    background: white;
+
+    padding: 35px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.25);
+
+    text-align: center;
+}
+
+.login-icon {
+    font-size: 50px;
+}
+
+.login-container h2 {
+    margin: 15px 0 5px;
+}
+
+.login-subtitle {
+    color: #777;
+    margin-bottom: 25px;
+}
+
+.login-container form {
+    text-align: left;
+}
+
+.login-container label {
+    display: block;
+
+    margin-top: 15px;
+
+    margin-bottom: 6px;
+
+    font-weight: bold;
+}
+
+.login-container input {
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 7px;
+
+    outline: none;
+}
+
+.login-container input:focus {
+    border-color: #0d6efd;
+}
+
+.btn {
+    width: 100%;
+
+    padding: 12px;
+
+    margin-top: 25px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.admin-btn {
+    background: #dc3545;
+}
+
+.student-btn {
+    background: #198754;
+}
+
+.parent-btn {
+    background: #6f42c1;
+}
+
+.driver-btn {
+    background: #212529;
+}
+
+.back {
+    display: block;
+
+    margin-top: 20px;
+
+    text-decoration: none;
+
+    color: #0d6efd;
+}
+
+.alert {
+    background: #f8d7da;
+
+    color: #842029;
+
+    padding: 10px;
+
+    border-radius: 6px;
+
+    margin-bottom: 15px;
+}
+
+
+/* =================================
+   DASHBOARD NAVBAR
+================================= */
+
+.dashboard-nav {
+    background: #212529;
+
+    color: white;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 18px 40px;
+}
+
+.dashboard-nav a {
+    color: white;
+
+    text-decoration: none;
+
+    background: #dc3545;
+
+    padding: 9px 18px;
+
+    border-radius: 6px;
+}
+
+
+/* =================================
+   DASHBOARD
+================================= */
+
+.dashboard-container {
+    width: 90%;
+
+    max-width: 1200px;
+
+    margin: 40px auto;
+}
+
+.dashboard-container > h1 {
+    margin-bottom: 8px;
+}
+
+
+/* =================================
+   STATISTICS
+================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin: 30px 0;
+}
+
+.stat-card {
+    color: white;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    text-align: center;
+}
+
+.stat-card h2 {
+    font-size: 40px;
+}
+
+.blue {
+    background: #0d6efd;
+}
+
+.green {
+    background: #198754;
+}
+
+.orange {
+    background: #fd7e14;
+}
+
+.purple {
+    background: #6f42c1;
+}
+
+
+/* =================================
+   DASHBOARD CARDS
+================================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+
+    margin-top: 30px;
+}
+
+.dashboard-card {
+    background: white;
+
+    padding: 30px;
+
+    text-decoration: none;
+
+    color: #222;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.08);
+
+    transition: .3s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.15);
+}
+
+.dashboard-card span {
+    font-size: 40px;
+
+    display: block;
+
+    margin-bottom: 10px;
+}
+
+
+/* =================================
+   PROFILE
+================================= */
+
+.profile-card {
+    background: white;
+
+    padding: 30px;
+
+    margin-top: 25px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.08);
+}
+
+.profile-card p {
+    padding: 8px 0;
+
+    border-bottom:
+        1px solid #eee;
+}
+
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media(max-width: 900px) {
+
+    .login-buttons {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .feature-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .dashboard-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+@media(max-width: 600px) {
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .login-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-container {
+        width: 90%;
+    }
+
+    .dashboard-nav {
+        padding: 15px;
+    }
+}
