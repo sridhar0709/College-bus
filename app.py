@@ -858,27 +858,72 @@ def route_information():
     )
 
 
-# ==========================================
+ # ==========================================
 # STUDENT COMPLAINT
 # ==========================================
 
 @app.route("/student_complaint", methods=["GET", "POST"])
 def student_complaint():
 
+    # Only student can access
     if session.get("role") != "student":
         return redirect(url_for("student_login"))
 
+
+    # When complaint form is submitted
     if request.method == "POST":
 
+        message = request.form.get(
+            "message", ""
+        ).strip()
+
+
+        # Check empty complaint
+        if not message:
+
+            flash("Please enter your complaint.")
+
+            return redirect(
+                url_for("student_complaint")
+            )
+
+
         complaint = {
+
             "register_no": session["student"],
-            "message": request.form.get("message", "").strip(),
+
+            "message": message,
+
             "status": "Pending"
         }
 
+
+        # Save complaint to MongoDB
         complaints.insert_one(complaint)
 
-        flash("Complaint submitted successfully.")
+
+        flash(
+            "Complaint submitted successfully."
+        )
+
+
+        # IMPORTANT: return after POST
+        return redirect(
+            url_for("student_complaint")
+        )
+
+
+    # Get current student details
+    student = students.find_one({
+        "register_no": session["student"]
+    })
+
+
+    # Show complaint page
+    return render_template(
+        "student_complaint.html",
+        student=student
+    )
 
 # ==========================================
 # STUDENT BUS TRACKING

@@ -1,34 +1,818 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Bus ETA</title>
+<html lang="en">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Bus ETA | College Bus Tracking</title>
+
+
+    <style>
+
+        /* =========================================
+           RESET
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+
+        /* =========================================
+           SIDEBAR
+        ========================================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 285px;
+            height: 100vh;
+
+            background: #111c2e;
+            color: white;
+
+            padding: 28px 16px;
+
+            overflow-y: auto;
+        }
+
+
+        .brand {
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+
+            padding: 8px 12px 28px;
+
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+
+            background: #2563eb;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+        }
+
+
+        .brand-text h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+
+        .brand-text p {
+            color: #aebbd0;
+            font-size: 12px;
+        }
+
+
+        /* =========================================
+           MENU
+        ========================================= */
+
+        .menu-title {
+            color: #7f91ad;
+
+            font-size: 12px;
+
+            letter-spacing: 1px;
+
+            margin: 30px 14px 12px;
+        }
+
+
+        .menu a {
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 15px 18px;
+
+            margin-bottom: 5px;
+
+            color: #e7edf7;
+
+            text-decoration: none;
+
+            border-radius: 12px;
+
+            font-size: 16px;
+
+            transition: 0.2s;
+        }
+
+
+        .menu a:hover {
+            background: #1d2b43;
+        }
+
+
+        .menu a.active {
+            background: #2864e8;
+            color: white;
+        }
+
+
+        .menu-icon {
+            width: 24px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+
+        .logout {
+            margin-top: 30px;
+
+            border-top: 1px solid rgba(255,255,255,0.12);
+
+            padding-top: 25px;
+        }
+
+
+        .logout a {
+            color: #ff8585;
+        }
+
+
+        /* =========================================
+           MAIN CONTENT
+        ========================================= */
+
+        .main {
+            margin-left: 285px;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .top-header {
+            height: 95px;
+
+            background: white;
+
+            border-bottom: 1px solid #e3e8f0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 34px;
+        }
+
+
+        .header-title h1 {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+
+        .header-title p {
+            color: #73819a;
+            font-size: 14px;
+        }
+
+
+        .parent-user {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 50%;
+
+            background: #edf3ff;
+
+            color: #2563eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: bold;
+
+            font-size: 18px;
+        }
+
+
+        .user-details strong {
+            display: block;
+            font-size: 14px;
+        }
+
+
+        .user-details span {
+            display: block;
+            color: #7b8799;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+
+        /* =========================================
+           PAGE
+        ========================================= */
+
+        .content {
+            padding: 35px;
+        }
+
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+
+        .page-title h2 {
+            font-size: 25px;
+            margin-bottom: 7px;
+        }
+
+
+        .page-title p {
+            color: #718096;
+        }
+
+
+        /* =========================================
+           ETA CARD
+        ========================================= */
+
+        .eta-card {
+            background: white;
+
+            border: 1px solid #e4e9f0;
+
+            border-radius: 16px;
+
+            padding: 32px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 28px;
+
+            box-shadow: 0 5px 15px rgba(25, 45, 75, 0.05);
+
+            margin-bottom: 25px;
+        }
+
+
+        .eta-icon {
+            width: 85px;
+            height: 85px;
+
+            border-radius: 15px;
+
+            background: #edf3ff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 42px;
+        }
+
+
+        .eta-details h3 {
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+
+        .eta-label {
+            color: #718096;
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+
+        #eta {
+            font-size: 30px;
+
+            color: #2563eb;
+
+            margin: 5px 0 10px;
+        }
+
+
+        .active-status {
+            color: #16a34a;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================
+           INFORMATION
+        ========================================= */
+
+        .card {
+            background: white;
+
+            border: 1px solid #e4e9f0;
+
+            border-radius: 16px;
+
+            padding: 28px;
+
+            box-shadow: 0 5px 15px rgba(25, 45, 75, 0.05);
+
+            margin-bottom: 25px;
+        }
+
+
+        .card h2 {
+            font-size: 20px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .info-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+
+        .info-box {
+            background: #f8fafc;
+
+            border: 1px solid #e6ebf2;
+
+            border-radius: 12px;
+
+            padding: 20px;
+        }
+
+
+        .info-box span {
+            display: block;
+
+            color: #718096;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .info-box strong {
+            font-size: 16px;
+        }
+
+
+        .green {
+            color: #16a34a;
+        }
+
+
+        /* =========================================
+           BACK BUTTON
+        ========================================= */
+
+        .back-button {
+            display: inline-block;
+
+            background: #2563eb;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+
+        .back-button:hover {
+            background: #1d4ed8;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .top-header {
+                padding: 20px;
+                height: auto;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .eta-card {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<div class="dashboard-container">
 
-    <h1>⏱️ Estimated Arrival Time</h1>
+<!-- =========================================
+     SIDEBAR
+========================================= -->
 
-    <div class="profile-card">
+<aside class="sidebar">
 
-        <h2>🚌 Bus ETA</h2>
 
-        <p>
-            Estimated arrival:
-            <strong>Calculating...</strong>
-        </p>
+    <div class="brand">
+
+        <div class="brand-icon">
+            🚌
+        </div>
+
+        <div class="brand-text">
+
+            <h2>BusTrack</h2>
+
+            <p>
+                College Transport System
+            </p>
+
+        </div>
 
     </div>
 
-    <a href="{{ url_for('parent_dashboard') }}">
-        ← Back to Parent Dashboard
-    </a>
 
-</div>
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="{{ url_for('parent_dashboard') }}">
+
+            <span class="menu-icon">🏠</span>
+
+            Dashboard
+
+        </a>
+
+
+        <a href="{{ url_for('parent_bus_tracking') }}">
+
+            <span class="menu-icon">📍</span>
+
+            Live Bus
+
+        </a>
+
+
+        <a href="{{ url_for('parent_bus_route') }}">
+
+            <span class="menu-icon">🛣️</span>
+
+            Bus Route
+
+        </a>
+
+
+        <a href="{{ url_for('parent_eta') }}"
+           class="active">
+
+            <span class="menu-icon">⏱️</span>
+
+            Bus ETA
+
+        </a>
+
+    </nav>
+
+
+    <div class="menu-title">
+        ACCOUNT
+    </div>
+
+
+    <nav class="menu logout">
+
+        <a href="{{ url_for('logout') }}">
+
+            <span class="menu-icon">↪</span>
+
+            Logout
+
+        </a>
+
+    </nav>
+
+
+</aside>
+
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="main">
+
+
+    <!-- HEADER -->
+
+    <header class="top-header">
+
+
+        <div class="header-title">
+
+            <h1>
+                Bus ETA
+            </h1>
+
+            <p>
+                College Bus Tracking System
+            </p>
+
+        </div>
+
+
+        <div class="parent-user">
+
+            <div class="avatar">
+                P
+            </div>
+
+            <div class="user-details">
+
+                <strong>
+                    Parent
+                </strong>
+
+                <span>
+                    Parent Account
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- CONTENT -->
+
+    <section class="content">
+
+
+        <div class="page-title">
+
+            <h2>
+                Estimated Arrival Time
+            </h2>
+
+            <p>
+                Check the estimated arrival time
+                of your child's college bus.
+            </p>
+
+        </div>
+
+
+
+        <!-- ETA -->
+
+        <div class="eta-card">
+
+
+            <div class="eta-icon">
+                🚌
+            </div>
+
+
+            <div class="eta-details">
+
+                <h3>
+                    Bus ETA
+                </h3>
+
+                <p class="eta-label">
+                    Estimated arrival
+                </p>
+
+                <div id="eta">
+                    Calculating...
+                </div>
+
+                <div class="active-status">
+                    🟢 Tracking Active
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- BUS INFORMATION -->
+
+        <div class="card">
+
+
+            <h2>
+                🚌 Bus Information
+            </h2>
+
+
+            <div class="info-grid">
+
+
+                <div class="info-box">
+
+                    <span>
+                        Bus Number
+                    </span>
+
+                    <strong>
+
+                        {% if parent %}
+
+                            {{ parent.get(
+                                "bus_number",
+                                "Not Assigned"
+                            ) }}
+
+                        {% else %}
+
+                            Not Assigned
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+
+                <div class="info-box">
+
+                    <span>
+                        Current Status
+                    </span>
+
+                    <strong class="green">
+                        🟢 Active
+                    </strong>
+
+                </div>
+
+
+
+                <div class="info-box">
+
+                    <span>
+                        GPS Status
+                    </span>
+
+                    <strong>
+                        📍 Available
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- BACK -->
+
+        <a href="{{ url_for('parent_dashboard') }}"
+           class="back-button">
+
+            ← Back to Parent Dashboard
+
+        </a>
+
+
+    </section>
+
+
+</main>
+
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const eta =
+            document.getElementById("eta");
+
+        if (eta) {
+
+            eta.textContent =
+                "Calculating...";
+
+        }
+
+    }
+);
+
+</script>
+
 
 </body>
+
 </html>

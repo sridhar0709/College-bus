@@ -5,80 +5,748 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Parent Bus Tracking</title>
+    <title>Live Bus Tracking | College Bus Tracking</title>
 
+    <!-- Existing CSS -->
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          crossorigin="">
+
+    <style>
+
+        /* =========================================
+           PARENT BUS TRACKING PAGE
+        ========================================= */
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        .parent-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* =========================================
+           SIDEBAR - SAME STYLE AS ADMIN
+        ========================================= */
+
+        .parent-sidebar {
+            width: 270px;
+            min-width: 270px;
+            background: #111c30;
+            color: white;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .sidebar-brand {
+            padding: 30px 25px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: #2864e8;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .brand-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .brand-subtitle {
+            font-size: 12px;
+            color: #9aa8bf;
+            margin-top: 4px;
+        }
+
+        .sidebar-section {
+            padding: 28px 20px 8px;
+            color: #71809a;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-menu {
+            padding: 0 16px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            margin: 5px 0;
+            color: #d9e1ef;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .sidebar-menu a.active {
+            background: #2864e8;
+            color: white;
+        }
+
+        .menu-icon {
+            width: 22px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .sidebar-logout {
+            position: absolute;
+            bottom: 25px;
+            left: 16px;
+            right: 16px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+            padding-top: 20px;
+        }
+
+        .sidebar-logout a {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            padding: 14px 18px;
+            color: #ff8b8b;
+            text-decoration: none;
+            border-radius: 12px;
+        }
+
+        .sidebar-logout a:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* =========================================
+           MAIN AREA
+        ========================================= */
+
+        .parent-main {
+            margin-left: 270px;
+            width: calc(100% - 270px);
+            min-height: 100vh;
+        }
+
+        /* TOP HEADER */
+
+        .top-header {
+            height: 92px;
+            background: white;
+            border-bottom: 1px solid #e2e7ef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 34px;
+            box-sizing: border-box;
+        }
+
+        .top-header h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .top-header p {
+            margin: 7px 0 0;
+            color: #71809a;
+            font-size: 14px;
+        }
+
+        .parent-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-circle {
+            width: 44px;
+            height: 44px;
+            background: #edf3ff;
+            color: #2864e8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-name {
+            font-weight: 700;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #8491a7;
+            margin-top: 3px;
+        }
+
+        /* =========================================
+           CONTENT
+        ========================================= */
+
+        .content {
+            padding: 32px;
+        }
+
+        .page-heading {
+            margin-bottom: 24px;
+        }
+
+        .page-heading h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .page-heading p {
+            margin: 7px 0 0;
+            color: #71809a;
+        }
+
+        /* =========================================
+           INFORMATION CARDS
+        ========================================= */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .info-card {
+            background: white;
+            border: 1px solid #e4e9f1;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(30,50,80,0.04);
+        }
+
+        .info-card-title {
+            color: #71809a;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .info-card-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* =========================================
+           GPS STATUS
+        ========================================= */
+
+        .status-card {
+            background: white;
+            border: 1px solid #e4e9f1;
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(30,50,80,0.04);
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .status-header h2 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        .status-badge {
+            background: #e9f9ef;
+            color: #17934d;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* =========================================
+           MAP
+        ========================================= */
+
+        .map-card {
+            background: white;
+            border: 1px solid #e4e9f1;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(30,50,80,0.04);
+        }
+
+        .map-heading {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e7ebf1;
+        }
+
+        .map-heading h2 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        .map-heading p {
+            margin: 6px 0 0;
+            color: #71809a;
+            font-size: 13px;
+        }
+
+        #parentMap {
+            width: 100%;
+            height: 500px;
+        }
+
+        /* =========================================
+           BACK BUTTON
+        ========================================= */
+
+        .back-button {
+            display: inline-block;
+            margin-top: 22px;
+            background: #2864e8;
+            color: white;
+            text-decoration: none;
+            padding: 11px 18px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-button:hover {
+            background: #1f55ca;
+        }
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            .parent-sidebar {
+                width: 220px;
+                min-width: 220px;
+            }
+
+            .parent-main {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .parent-sidebar {
+                position: relative;
+                width: 100%;
+                min-width: 100%;
+                min-height: auto;
+            }
+
+            .parent-layout {
+                display: block;
+            }
+
+            .parent-main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .sidebar-logout {
+                position: relative;
+                bottom: auto;
+            }
+
+            .top-header {
+                padding: 20px;
+                height: auto;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-    <h1>🚌 Live Bus Tracking</h1>
+<div class="parent-layout">
 
-    <hr>
+    <!-- =========================================
+         SIDEBAR
+    ========================================= -->
 
-    {% if parent %}
-        <h3>Parent: {{ parent.name }}</h3>
-    {% endif %}
+    <aside class="parent-sidebar">
 
-    {% if student %}
-        <p>
-            <strong>Student:</strong>
-            {{ student.name }}
-        </p>
+        <div class="sidebar-brand">
 
-        <p>
-            <strong>Register Number:</strong>
-            {{ student.register_no }}
-        </p>
-    {% endif %}
+            <div class="brand-icon">
+                🚌
+            </div>
 
-    {% if bus %}
+            <div>
+                <div class="brand-title">
+                    BusTrack
+                </div>
 
-        <p>
-            <strong>Bus Number:</strong>
-            {{ bus.bus_number }}
-        </p>
+                <div class="brand-subtitle">
+                    College Transport System
+                </div>
+            </div>
 
-        <p>
-            <strong>Bus Name:</strong>
-            {{ bus.bus_name }}
-        </p>
+        </div>
 
-    {% else %}
 
-        <p>No bus assigned to this student.</p>
+        <div class="sidebar-section">
+            Main Menu
+        </div>
 
-    {% endif %}
 
+        <div class="sidebar-menu">
+
+            <a href="{{ url_for('parent_dashboard') }}">
+                <span class="menu-icon">▦</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('parent_bus_tracking') }}"
+               class="active">
+                <span class="menu-icon">📍</span>
+                Live Bus
+            </a>
+
+            <a href="{{ url_for('parent_bus_route') }}">
+                <span class="menu-icon">🛣️</span>
+                Bus Route
+            </a>
+
+            <a href="{{ url_for('parent_eta') }}">
+                <span class="menu-icon">⏱️</span>
+                Bus ETA
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-section">
+            Monitoring
+        </div>
+
+
+        <div class="sidebar-menu">
+
+            <a href="{{ url_for('parent_bus_tracking') }}"
+               class="active">
+                <span class="menu-icon">🚌</span>
+                GPS Tracking
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-logout">
+
+            <a href="{{ url_for('logout') }}">
+                <span class="menu-icon">↪</span>
+                Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+
+    <main class="parent-main">
+
+
+        <!-- TOP HEADER -->
+
+        <header class="top-header">
+
+            <div>
+
+                <h1>
+                    Live Bus Tracking
+                </h1>
+
+                <p>
+                    College Bus Tracking System
+                </p>
+
+            </div>
+
+
+            <div class="parent-user">
+
+                <div class="user-circle">
+                    P
+                </div>
+
+                <div>
+
+                    <div class="user-name">
+                        {{ parent.get("name", "Parent") if parent else "Parent" }}
+                    </div>
+
+                    <div class="user-role">
+                        Parent
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+
+            <div class="page-heading">
+
+                <h2>
+                    🚌 Your Child's Bus
+                </h2>
+
+                <p>
+                    Monitor the current location of your child's college bus.
+                </p>
+
+            </div>
+
+
+            <!-- INFORMATION -->
+
+            <div class="info-grid">
+
+
+                <div class="info-card">
+
+                    <div class="info-card-title">
+                        Parent
+                    </div>
+
+                    <div class="info-card-value">
+
+                        {{ parent.get("name", "Not Available")
+                           if parent else "Not Available" }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <div class="info-card-title">
+                        Student
+                    </div>
+
+                    <div class="info-card-value">
+
+                        {{ parent.get("student_name", "Not Available")
+                           if parent else "Not Available" }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <div class="info-card-title">
+                        Bus Number
+                    </div>
+
+                    <div class="info-card-value">
+
+                        {{ parent.get("bus_number", "Not Assigned")
+                           if parent else "Not Assigned" }}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- GPS STATUS -->
+
+            <div class="status-card">
+
+                <div class="status-header">
+
+                    <h2>
+                        📍 GPS Status
+                    </h2>
+
+                    {% if location %}
+
+                    <span class="status-badge">
+                        🟢 Live Location Available
+                    </span>
+
+                    {% else %}
+
+                    <span class="status-badge"
+                          style="background:#fff1f1;color:#d64545;">
+                        🔴 Location Not Available
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                {% if location %}
+
+                <p>
+                    <strong>Latitude:</strong>
+                    {{ location.get("latitude") }}
+                </p>
+
+                <p>
+                    <strong>Longitude:</strong>
+                    {{ location.get("longitude") }}
+                </p>
+
+                {% else %}
+
+                <p>
+                    No live GPS location is currently available for this bus.
+                </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- MAP -->
+
+            <div class="map-card">
+
+                <div class="map-heading">
+
+                    <h2>
+                        🗺️ Live Bus Location
+                    </h2>
+
+                    <p>
+                        Current GPS position of your child's college bus
+                    </p>
+
+                </div>
+
+
+                <div id="parentMap"></div>
+
+            </div>
+
+
+            <a href="{{ url_for('parent_dashboard') }}"
+               class="back-button">
+
+                ← Back to Parent Dashboard
+
+            </a>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- Leaflet JS -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        crossorigin=""></script>
+
+
+<script>
+
+    // Default location
+    let latitude = 11.0168;
+    let longitude = 76.9558;
 
     {% if location %}
 
-        <h3>📍 Current Bus Location</h3>
-
-        <p>
-            Latitude:
-            {{ location.latitude }}
-        </p>
-
-        <p>
-            Longitude:
-            {{ location.longitude }}
-        </p>
-
-    {% else %}
-
-        <p>Live location is not available.</p>
+        latitude = {{ location.get("latitude", 11.0168) }};
+        longitude = {{ location.get("longitude", 76.9558) }};
 
     {% endif %}
 
 
-    <br>
+    const parentMap = L.map("parentMap").setView(
+        [latitude, longitude],
+        15
+    );
 
-    <a href="{{ url_for('parent_dashboard') }}">
-        ← Back to Parent Dashboard
-    </a>
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            attribution: "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(parentMap);
+
+
+    const busMarker = L.marker(
+        [latitude, longitude]
+    ).addTo(parentMap);
+
+
+    busMarker.bindPopup(
+        "<b>🚌 College Bus</b><br>" +
+        "📍 Live GPS Location"
+    ).openPopup();
+
+</script>
+
 
 </body>
-
 </html>

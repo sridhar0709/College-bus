@@ -8,290 +8,875 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Parent Dashboard</title>
+    <title>Parent Dashboard | College Bus Tracking</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* ==========================================
+           SIDEBAR
+        ========================================== */
+
+        .parent-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 285px;
+            height: 100vh;
+            background: #101b2d;
+            color: white;
+            padding: 28px 18px;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 8px 10px 28px;
+            border-bottom: 1px solid #29364b;
+        }
+
+        .brand-icon {
+            width: 50px;
+            height: 50px;
+            background: #2864ed;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .brand p {
+            margin: 5px 0 0;
+            color: #9aa9c1;
+            font-size: 13px;
+        }
+
+        .menu-title {
+            color: #7183a0;
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin: 30px 12px 12px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .sidebar-menu a {
+            text-decoration: none;
+            color: #dce5f5;
+            padding: 14px 16px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #2864ed;
+            color: white;
+        }
+
+        .sidebar-menu .logout {
+            color: #ff8d91;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+            border-top: 1px solid #29364b;
+            padding-top: 18px;
+        }
+
+        /* ==========================================
+           MAIN AREA
+        ========================================== */
+
+        .parent-main {
+            margin-left: 285px;
+            min-height: 100vh;
+        }
+
+        /* ==========================================
+           TOP HEADER
+        ========================================== */
+
+        .top-header {
+            height: 92px;
+            background: white;
+            border-bottom: 1px solid #e2e7ef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 34px;
+        }
+
+        .top-header h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .top-header p {
+            margin: 6px 0 0;
+            color: #74839b;
+            font-size: 14px;
+        }
+
+        .parent-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #eaf1ff;
+            color: #2864ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .parent-user strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .parent-user span {
+            color: #8491a5;
+            font-size: 12px;
+        }
+
+        /* ==========================================
+           CONTENT
+        ========================================== */
+
+        .content {
+            padding: 34px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .page-heading p {
+            margin: 7px 0 0;
+            color: #75839a;
+        }
+
+        /* ==========================================
+           PROFILE CARD
+        ========================================== */
+
+        .profile-card {
+            background: white;
+            border: 1px solid #e1e7ef;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 18px rgba(30, 50, 80, 0.05);
+        }
+
+        .profile-card h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f7f9fc;
+            border: 1px solid #e8edf4;
+            border-radius: 12px;
+            padding: 17px;
+        }
+
+        .info-box small {
+            color: #75839a;
+            display: block;
+            margin-bottom: 7px;
+        }
+
+        .info-box strong {
+            font-size: 14px;
+        }
+
+        /* ==========================================
+           SECTION TITLE
+        ========================================== */
+
+        .section-heading {
+            margin: 30px 0 16px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .section-heading p {
+            color: #7a879b;
+            margin: 5px 0 0;
+        }
+
+        /* ==========================================
+           FEATURE CARDS
+        ========================================== */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border: 1px solid #e1e7ef;
+            border-radius: 16px;
+            padding: 25px;
+            text-decoration: none;
+            color: #172033;
+            min-height: 180px;
+            transition: 0.2s;
+            box-shadow: 0 5px 18px rgba(30, 50, 80, 0.04);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 25px rgba(30, 50, 80, 0.09);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #edf3ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-card h3 {
+            margin: 0 0 9px;
+            font-size: 17px;
+        }
+
+        .dashboard-card p {
+            margin: 0;
+            color: #728098;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* ==========================================
+           STATUS
+        ========================================== */
+
+        .status-active {
+            color: #16a05d;
+            font-weight: bold;
+        }
+
+        /* ==========================================
+           EMERGENCY
+        ========================================== */
+
+        .emergency-card {
+            background: white;
+            border: 1px solid #e1e7ef;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .emergency-card h3 {
+            margin-top: 0;
+        }
+
+        .emergency-card p {
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        .emergency-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .emergency-button {
+            background: #fff1f1;
+            color: #d9363e;
+            border: 1px solid #ffd2d2;
+            padding: 11px 18px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* ==========================================
+           QUICK INFORMATION
+        ========================================== */
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 1100px) {
+
+            .profile-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .quick-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+        @media (max-width: 750px) {
+
+            .parent-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .sidebar-bottom {
+                position: static;
+                margin-top: 20px;
+            }
+
+            .parent-main {
+                margin-left: 0;
+            }
+
+            .dashboard-grid,
+            .profile-grid,
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .top-header {
+                padding: 20px;
+                height: auto;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
 <body>
 
 <!-- ==========================================
-     NAVBAR
+     SIDEBAR
 ========================================== -->
 
-<nav class="dashboard-nav">
+<aside class="parent-sidebar">
 
-    <div>
-        <h2>🚌 College Bus Tracking System</h2>
-        <p>Parent Dashboard</p>
+    <div class="brand">
+
+        <div class="brand-icon">
+            🚌
+        </div>
+
+        <div>
+            <h2>BusTrack</h2>
+            <p>College Transport System</p>
+        </div>
+
     </div>
 
-    <a href="{{ url_for('logout') }}">
-        Logout
-    </a>
 
-</nav>
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+    <div class="sidebar-menu">
+
+        <a href="{{ url_for('parent_dashboard') }}"
+           class="active">
+            📊 Dashboard
+        </a>
+
+        <a href="{{ url_for('parent_bus_tracking') }}">
+            📍 Bus Tracking
+        </a>
+
+        <a href="{{ url_for('parent_bus_route') }}">
+            🛣️ Bus Route
+        </a>
+
+        <a href="{{ url_for('parent_eta') }}">
+            ⏱️ Bus ETA
+        </a>
+
+    </div>
+
+
+    <div class="menu-title">
+        MONITORING
+    </div>
+
+    <div class="sidebar-menu">
+
+        <a href="{{ url_for('parent_bus_tracking') }}">
+            🚌 Live GPS
+        </a>
+
+        <a href="{{ url_for('parent_eta') }}">
+            🔔 Notifications
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-menu">
+
+            <a href="{{ url_for('logout') }}"
+               class="logout">
+                ↪ Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</aside>
 
 
 <!-- ==========================================
-     MAIN CONTAINER
+     MAIN
 ========================================== -->
 
-<div class="dashboard-container">
-
-    <h1>Welcome Parent 👨‍👩‍👧</h1>
-
-    <p class="dashboard-subtitle">
-        Monitor your child's college bus and travel status.
-    </p>
+<main class="parent-main">
 
 
-    <!-- ==========================================
-         PARENT DETAILS
-    ========================================== -->
+    <!-- TOP HEADER -->
 
-    <h2 class="section-title">
-        👨‍👩‍👧 Parent & Student Details
-    </h2>
+    <header class="top-header">
 
-    <div class="profile-card">
+        <div>
 
-        {% if parent %}
-
-        <p>
-            <strong>Parent Name:</strong>
-            {{ parent.get("name", "Not Available") }}
-        </p>
-
-        <p>
-            <strong>Phone Number:</strong>
-            {{ parent.get("phone_number", "Not Available") }}
-        </p>
-
-        <p>
-            <strong>Student Name:</strong>
-            {{ parent.get("student_name", "Not Available") }}
-        </p>
-
-        <p>
-            <strong>Register Number:</strong>
-            {{ parent.get("student_register_no", "Not Available") }}
-        </p>
-
-        <p>
-            <strong>Bus Number:</strong>
-            {{ parent.get("bus_number", "Not Assigned") }}
-        </p>
-
-        {% else %}
-
-        <p>
-            Parent information not available.
-        </p>
-
-        {% endif %}
-
-    </div>
-
-
-    <!-- ==========================================
-         BUS STATUS
-    ========================================== -->
-
-    <h2 class="section-title">
-        🚌 Bus Status
-    </h2>
-
-    <div class="dashboard-grid">
-
-        <!-- GPS LOCATION -->
-
-        <a href="{{ url_for('parent_bus_tracking') }}"
-           class="dashboard-card">
-
-            <span>📍</span>
-
-            <h3>Bus GPS Location</h3>
+            <h1>Parent Dashboard</h1>
 
             <p>
-                View the current location of your
-                child's college bus.
-            </p>
-
-        </a>
-
-
-        <!-- BUS ROUTE -->
-
-        <a href="{{ url_for('parent_bus_route') }}"
-           class="dashboard-card">
-
-            <span>🛣️</span>
-
-            <h3>Bus Route</h3>
-
-            <p>
-                View bus route, stops and
-                destination information.
-            </p>
-
-        </a>
-
-
-        <!-- ETA -->
-
-        <a href="{{ url_for('parent_eta') }}"
-           class="dashboard-card">
-
-            <span>⏱️</span>
-
-            <h3>Estimated Arrival</h3>
-
-            <p>
-                Check the estimated arrival time
-                of the bus.
-            </p>
-
-        </a>
-
-    </div>
-
-
-    <!-- ==========================================
-         STUDENT STATUS
-    ========================================== -->
-
-    <h2 class="section-title">
-        🔔 Student Status
-    </h2>
-
-    <div class="dashboard-grid">
-
-        <div class="dashboard-card">
-
-            <span>🎓</span>
-
-            <h3>Student Status</h3>
-
-            <p>
-                {% if student_status %}
-                    {{ student_status }}
-                {% else %}
-                    Waiting for status update.
-                {% endif %}
+                College Bus Tracking System
             </p>
 
         </div>
 
 
-        <div class="dashboard-card">
+        <div class="parent-user">
 
-            <span>📱</span>
+            <div class="user-circle">
+                P
+            </div>
 
-            <h3>Notifications</h3>
+            <div>
+
+                <strong>Parent</strong>
+
+                <span>
+                    Student Transport Monitoring
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+
+        <!-- PAGE HEADING -->
+
+        <div class="page-heading">
+
+            <h2>Overview</h2>
 
             <p>
-                Receive updates about your child's
-                bus journey and attendance.
+                Monitor your child's college transportation.
             </p>
 
         </div>
 
-    </div>
 
+        <!-- ==========================================
+             PARENT & STUDENT DETAILS
+        ========================================== -->
 
-    <!-- ==========================================
-         EMERGENCY CONTACT
-    ========================================== -->
+        <div class="profile-card">
 
-    <div class="emergency-card">
+            <h3>👨‍👩‍👧 Parent & Student Details</h3>
 
-        <h3>🚨 Emergency Contact</h3>
-
-        <p>
-            If there is an emergency during
-            transportation, contact the college
-            transport administration.
-        </p>
-
-        <div class="emergency-buttons">
-
-            <a href="tel:108"
-               class="emergency-button">
-
-                🚑 Emergency: 108
-
-            </a>
-
-            <a href="tel:112"
-               class="emergency-button">
-
-                📞 Emergency: 112
-
-            </a>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==========================================
-         QUICK INFORMATION
-    ========================================== -->
-
-    <h2 class="section-title">
-        📋 Quick Information
-    </h2>
-
-    <div class="profile-card">
-
-        <p>
-            <strong>Bus Number:</strong>
             {% if parent %}
-                {{ parent.get("bus_number", "Not Assigned") }}
+
+            <div class="profile-grid">
+
+                <div class="info-box">
+                    <small>Parent Name</small>
+                    <strong>
+                        {{ parent.get("name", "Not Available") }}
+                    </strong>
+                </div>
+
+                <div class="info-box">
+                    <small>Phone Number</small>
+                    <strong>
+                        {{ parent.get("phone_number", "Not Available") }}
+                    </strong>
+                </div>
+
+                <div class="info-box">
+                    <small>Student Name</small>
+                    <strong>
+                        {{ parent.get("student_name", "Not Available") }}
+                    </strong>
+                </div>
+
+                <div class="info-box">
+                    <small>Register Number</small>
+                    <strong>
+                        {{ parent.get("student_register_no", "Not Available") }}
+                    </strong>
+                </div>
+
+                <div class="info-box">
+                    <small>Bus Number</small>
+                    <strong>
+                        {{ parent.get("bus_number", "Not Assigned") }}
+                    </strong>
+                </div>
+
+            </div>
+
             {% else %}
-                Not Assigned
+
+            <p>
+                Parent information not available.
+            </p>
+
             {% endif %}
-        </p>
 
-        <p>
-            <strong>Current Status:</strong>
-            <span class="status-active">
-                🟢 Tracking Active
-            </span>
-        </p>
+        </div>
 
-        <p>
-            <strong>GPS:</strong>
-            📍 Available
-        </p>
 
-        <p>
-            <strong>ETA:</strong>
-            ⏱️ Check Live ETA
-        </p>
+        <!-- ==========================================
+             BUS STATUS
+        ========================================== -->
+
+        <div class="section-heading">
+
+            <h2>Bus Status</h2>
+
+            <p>
+                Monitor your child's bus journey.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-grid">
+
+
+            <a href="{{ url_for('parent_bus_tracking') }}"
+               class="dashboard-card">
+
+                <div class="card-icon">
+                    📍
+                </div>
+
+                <h3>Bus GPS Location</h3>
+
+                <p>
+                    View the current location of your
+                    child's college bus.
+                </p>
+
+            </a>
+
+
+            <a href="{{ url_for('parent_bus_route') }}"
+               class="dashboard-card">
+
+                <div class="card-icon">
+                    🛣️
+                </div>
+
+                <h3>Bus Route</h3>
+
+                <p>
+                    View bus route, stops and
+                    destination information.
+                </p>
+
+            </a>
+
+
+            <a href="{{ url_for('parent_eta') }}"
+               class="dashboard-card">
+
+                <div class="card-icon">
+                    ⏱️
+                </div>
+
+                <h3>Estimated Arrival</h3>
+
+                <p>
+                    Check the estimated arrival time
+                    of the bus.
+                </p>
+
+            </a>
+
+        </div>
+
+
+        <!-- ==========================================
+             STUDENT STATUS
+        ========================================== -->
+
+        <div class="section-heading">
+
+            <h2>Student Status</h2>
+
+            <p>
+                Current student transportation information.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-grid">
+
+
+            <div class="dashboard-card">
+
+                <div class="card-icon">
+                    🎓
+                </div>
+
+                <h3>Student Status</h3>
+
+                <p>
+
+                    {% if student_status %}
+                        {{ student_status }}
+                    {% else %}
+                        Waiting for status update.
+                    {% endif %}
+
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div class="card-icon">
+                    📱
+                </div>
+
+                <h3>Notifications</h3>
+
+                <p>
+                    Receive updates about your child's
+                    bus journey and attendance.
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div class="card-icon">
+                    🟢
+                </div>
+
+                <h3>Tracking Status</h3>
+
+                <p>
+                    Bus tracking is currently active.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             EMERGENCY
+        ========================================== -->
+
+        <div class="emergency-card">
+
+            <h3>🚨 Emergency Contact</h3>
+
+            <p>
+                If there is an emergency during
+                transportation, contact the college
+                transport administration.
+            </p>
+
+            <div class="emergency-buttons">
+
+                <a href="tel:108"
+                   class="emergency-button">
+                    🚑 Emergency: 108
+                </a>
+
+                <a href="tel:112"
+                   class="emergency-button">
+                    📞 Emergency: 112
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             QUICK INFORMATION
+        ========================================== -->
+
+        <div class="section-heading">
+
+            <h2>Quick Information</h2>
+
+            <p>
+                Current bus tracking information.
+            </p>
+
+        </div>
+
+
+        <div class="profile-card">
+
+            <div class="quick-grid">
+
+                <div class="info-box">
+
+                    <small>Bus Number</small>
+
+                    <strong>
+
+                        {% if parent %}
+                            {{ parent.get("bus_number", "Not Assigned") }}
+                        {% else %}
+                            Not Assigned
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <small>Current Status</small>
+
+                    <strong class="status-active">
+                        🟢 Tracking Active
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <small>GPS</small>
+
+                    <strong>
+                        📍 Available
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <small>ETA</small>
+
+                    <strong>
+                        ⏱️ Check Live ETA
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
-
-    <!-- ==========================================
-         LOGOUT
-    ========================================== -->
-
-    <div class="logout-section">
-
-        <a href="{{ url_for('logout') }}"
-           class="logout-button">
-
-            🚪 Logout
-
-        </a>
-
-    </div>
-
-</div>
+</main>
 
 </body>
 

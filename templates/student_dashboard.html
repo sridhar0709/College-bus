@@ -10,217 +10,1248 @@
 
     <title>Student Dashboard | College Bus Tracking</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* ==========================================
+           RESET
+        ========================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+            overflow-x: hidden;
+        }
+
+
+        /* ==========================================
+           SIDEBAR
+        ========================================== */
+
+        .sidebar {
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 286px;
+            height: 100vh;
+
+            background: #111d31;
+
+            color: white;
+
+            padding: 28px 17px;
+
+            overflow-y: auto;
+
+            z-index: 1000;
+        }
+
+
+        /* BRAND */
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            padding: 5px 12px 30px;
+
+            border-bottom: 1px solid #2a3548;
+        }
+
+
+        .brand-icon {
+
+            width: 48px;
+            height: 48px;
+
+            background: #2864e8;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+
+            flex-shrink: 0;
+        }
+
+
+        .brand h2 {
+
+            color: white;
+
+            font-size: 20px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .brand span {
+
+            color: #aeb9ca;
+
+            font-size: 12px;
+        }
+
+
+        /* ==========================================
+           MENU
+        ========================================== */
+
+        .menu-title {
+
+            color: #7f8da5;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin: 30px 13px 12px;
+        }
+
+
+        .nav-item {
+
+            width: 100%;
+
+            min-height: 54px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            padding: 0 17px;
+
+            margin-bottom: 4px;
+
+            border-radius: 11px;
+
+            background: transparent;
+
+            color: #dce4f2;
+
+            text-decoration: none;
+
+            border: none;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            text-align: left;
+        }
+
+
+        .nav-item:hover {
+
+            background: #1d2d49;
+
+            color: white;
+        }
+
+
+        .nav-item.active {
+
+            background: #2864e8;
+
+            color: white;
+        }
+
+
+        .nav-icon {
+
+            width: 25px;
+
+            text-align: center;
+
+            font-size: 17px;
+        }
+
+
+        /* LOGOUT */
+
+        .logout {
+
+            margin-top: 28px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #2a3548;
+        }
+
+
+        .logout a {
+
+            color: #ff7d85;
+        }
+
+
+        /* ==========================================
+           MAIN
+        ========================================== */
+
+        .main {
+
+            margin-left: 286px;
+
+            width: calc(100% - 286px);
+
+            min-height: 100vh;
+        }
+
+
+        /* ==========================================
+           TOP HEADER
+        ========================================== */
+
+        .topbar {
+
+            height: 94px;
+
+            background: white;
+
+            border-bottom: 1px solid #e4e9f1;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 34px;
+        }
+
+
+        .page-title h1 {
+
+            font-size: 25px;
+
+            color: #172033;
+
+            margin-bottom: 6px;
+        }
+
+
+        .page-title p {
+
+            color: #7d8798;
+
+            font-size: 14px;
+        }
+
+
+        /* PROFILE */
+
+        .student-profile {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .profile-icon {
+
+            width: 44px;
+            height: 44px;
+
+            border-radius: 50%;
+
+            background: #eaf1ff;
+
+            color: #2864e8;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+
+            font-weight: bold;
+        }
+
+
+        .student-profile strong {
+
+            display: block;
+
+            font-size: 14px;
+        }
+
+
+        .student-profile small {
+
+            display: block;
+
+            color: #7d8798;
+
+            margin-top: 4px;
+        }
+
+
+        /* ==========================================
+           CONTENT
+        ========================================== */
+
+        .content {
+
+            padding: 35px;
+
+            width: 100%;
+        }
+
+
+        /* ==========================================
+           SECTION TITLE
+        ========================================== */
+
+        .section-heading {
+
+            margin-bottom: 25px;
+        }
+
+
+        .section-heading h2 {
+
+            font-size: 23px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .section-heading p {
+
+            color: #7d8798;
+
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           WELCOME CARD
+        ========================================== */
+
+        .welcome-card {
+
+            background: white;
+
+            border: 1px solid #e4e9f1;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 5px 18px rgba(25, 42, 70, 0.05);
+        }
+
+
+        .welcome-card h2 {
+
+            font-size: 21px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .welcome-card p {
+
+            color: #7d8798;
+
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           FEATURE CARDS
+        ========================================== */
+
+        .dashboard-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 18px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .dashboard-card {
+
+            background: white;
+
+            border: 1px solid #e4e9f1;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            min-height: 175px;
+
+            text-decoration: none;
+
+            color: #172033;
+
+            box-shadow:
+                0 5px 18px rgba(25, 42, 70, 0.05);
+
+            transition: 0.2s;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: flex-start;
+        }
+
+
+        .dashboard-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 9px 25px rgba(25, 42, 70, 0.09);
+
+            border-color: #d4dff4;
+        }
+
+
+        .dashboard-card span {
+
+            width: 45px;
+            height: 45px;
+
+            border-radius: 10px;
+
+            background: #edf3ff;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 22px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .dashboard-card h3 {
+
+            font-size: 17px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .dashboard-card p {
+
+            color: #7d8798;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+
+        /* ==========================================
+           PROFILE CARD
+        ========================================== */
+
+        .profile-card {
+
+            background: white;
+
+            border: 1px solid #e4e9f1;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 5px 18px rgba(25, 42, 70, 0.05);
+        }
+
+
+        .profile-card h2 {
+
+            font-size: 18px;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* ==========================================
+           STUDENT INFORMATION GRID
+        ========================================== */
+
+        .student-info-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 15px;
+        }
+
+
+        .info-box {
+
+            background: #f8faff;
+
+            border: 1px solid #e7edf5;
+
+            border-radius: 10px;
+
+            padding: 18px;
+        }
+
+
+        .info-box span {
+
+            display: block;
+
+            color: #7d8798;
+
+            font-size: 12px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .info-box strong {
+
+            display: block;
+
+            color: #172033;
+
+            font-size: 15px;
+
+            word-break: break-word;
+        }
+
+
+        /* ==========================================
+           BUS STATUS
+        ========================================== */
+
+        .bus-status {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            background: #f8faff;
+
+            border: 1px solid #e7edf5;
+
+            border-radius: 10px;
+
+            padding: 18px 20px;
+
+            margin-top: 10px;
+        }
+
+
+        .bus-number {
+
+            color: #172033;
+
+            font-weight: bold;
+
+            font-size: 15px;
+        }
+
+
+        .status-active {
+
+            color: #16a34a;
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 1100px) {
+
+            .dashboard-grid {
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+
+            .student-info-grid {
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+        }
+
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+
+                width: 230px;
+            }
+
+
+            .main {
+
+                margin-left: 230px;
+
+                width: calc(100% - 230px);
+            }
+
+
+            .dashboard-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .topbar {
+
+                padding: 0 20px;
+            }
+
+
+            .content {
+
+                padding: 20px;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+            }
+
+
+            .main {
+
+                margin-left: 0;
+
+                width: 100%;
+            }
+
+
+            .topbar {
+
+                height: auto;
+
+                padding: 20px;
+
+                gap: 15px;
+            }
+
+
+            .student-info-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .bus-status {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 10px;
+            }
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-<!-- ==========================================
-     NAVIGATION BAR
-========================================== -->
-
-<nav class="dashboard-nav">
-
-    <h2>🎓 Student Dashboard</h2>
-
-    <a href="{{ url_for('logout') }}">
-        Logout
-    </a>
-
-</nav>
-
 
 <!-- ==========================================
-     MAIN CONTAINER
+     SIDEBAR
 ========================================== -->
 
-<div class="dashboard-container">
+<aside class="sidebar">
 
-    <h1>
-        Welcome,
-        {{ student.get("name", "Student") if student else "Student" }}
-    </h1>
 
-    <p>
-        College Bus Tracking System
-    </p>
+    <!-- BRAND -->
 
+    <div class="brand">
 
-    <!-- ==========================================
-         STUDENT PROFILE
-    ========================================== -->
+        <div class="brand-icon">
+            🚌
+        </div>
 
-    <div class="profile-card">
+        <div>
 
-        <h2>👨‍🎓 Student Information</h2>
+            <h2>
+                BusTrack
+            </h2>
 
-        {% if student %}
-
-        <p>
-            <strong>Name:</strong>
-            {{ student.get("name", "Not Available") }}
-        </p>
-
-        <p>
-            <strong>Register Number:</strong>
-            {{ student.get("register_no", "Not Available") }}
-        </p>
-
-        <p>
-            <strong>Phone Number:</strong>
-            {{ student.get("phone", "Not Available") }}
-        </p>
-
-        <p>
-            <strong>Bus Number:</strong>
-            {{ student.get("bus_number", "Not Assigned") }}
-        </p>
-
-        <p>
-            <strong>Route:</strong>
-            {{ student.get("route", "Not Assigned") }}
-        </p>
-
-        {% else %}
-
-        <p>
-            Student information not available.
-        </p>
-
-        {% endif %}
-
-    </div>
-
-
-    <!-- ==========================================
-         DASHBOARD FEATURES
-    ========================================== -->
-
-    <div class="dashboard-grid">
-
-
-        <!-- LIVE LOCATION -->
-
-        <a href="{{ url_for('bus_tracking') }}"
-           class="dashboard-card">
-
-            <span>📍</span>
-
-            <h3>Live Location Tracking</h3>
-
-            <p>
-                Track your college bus live using
-                GPS and Google Maps.
-            </p>
-
-        </a>
-
-
-        <!-- BUS DETAILS -->
-
-        <a href="{{ url_for('bus_details') }}"
-           class="dashboard-card">
-
-            <span>🚌</span>
-
-            <h3>View Bus Details</h3>
-
-            <p>
-                View bus number, driver details,
-                capacity and assigned bus.
-            </p>
-
-        </a>
-
-
-        <!-- QR ATTENDANCE -->
-
-        <a href="{{ url_for('qr_attendance') }}"
-           class="dashboard-card">
-
-            <span>📱</span>
-
-            <h3>QR Attendance</h3>
-
-            <p>
-                Scan the QR code to mark your
-                bus attendance.
-            </p>
-
-        </a>
-
-
-        <!-- ROUTE INFORMATION -->
-
-        <a href="{{ url_for('route_information') }}"
-           class="dashboard-card">
-
-            <span>🛣️</span>
-
-            <h3>Route Information</h3>
-
-            <p>
-                View bus route, stops and
-                travel information.
-            </p>
-
-        </a>
-
-
-        <!-- COMPLAINT -->
-
-        <a href="{{ url_for('student_complaint') }}"
-           class="dashboard-card">
-
-            <span>📝</span>
-
-            <h3>Submit Complaint</h3>
-
-            <p>
-                Report any problem related to
-                the college bus service.
-            </p>
-
-        </a>
-
-
-    </div>
-
-
-    <!-- ==========================================
-         BUS STATUS
-    ========================================== -->
-
-    <div class="profile-card">
-
-        <h2>🚌 Bus Status</h2>
-
-        <p>
-            <strong>Bus Number:</strong>
-
-            {% if student %}
-                {{ student.get("bus_number", "Not Assigned") }}
-            {% else %}
-                Not Assigned
-            {% endif %}
-
-        </p>
-
-        <p>
-            <strong>Status:</strong>
-
-            <span class="status-active">
-                ● Available
+            <span>
+                College Transport System
             </span>
 
-        </p>
+        </div>
 
     </div>
 
 
-</div>
+    <!-- MAIN MENU -->
+
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+
+    <a href="#"
+       class="nav-item active">
+
+        <span class="nav-icon">
+            ▦
+        </span>
+
+        Dashboard
+
+    </a>
+
+
+    <a href="{{ url_for('bus_details') }}"
+       class="nav-item">
+
+        <span class="nav-icon">
+            🚌
+        </span>
+
+        Bus Details
+
+    </a>
+
+
+    <a href="{{ url_for('route_information') }}"
+       class="nav-item">
+
+        <span class="nav-icon">
+            🛣️
+        </span>
+
+        Route Information
+
+    </a>
+
+
+    <div class="menu-title">
+        MONITORING
+    </div>
+
+
+    <a href="{{ url_for('bus_tracking') }}"
+       class="nav-item">
+
+        <span class="nav-icon">
+            📍
+        </span>
+
+        Live GPS
+
+    </a>
+
+
+    <a href="{{ url_for('qr_attendance') }}"
+       class="nav-item">
+
+        <span class="nav-icon">
+            ✓
+        </span>
+
+        QR Attendance
+
+    </a>
+
+
+    <a href="{{ url_for('student_complaint') }}"
+       class="nav-item">
+
+        <span class="nav-icon">
+            ⚠️
+        </span>
+
+        Complaints
+
+    </a>
+
+
+    <!-- LOGOUT -->
+
+    <div class="logout">
+
+        <a href="{{ url_for('logout') }}"
+           class="nav-item">
+
+            <span class="nav-icon">
+                ↪
+            </span>
+
+            Logout
+
+        </a>
+
+    </div>
+
+
+</aside>
+
+
+
+<!-- ==========================================
+     MAIN
+========================================== -->
+
+<main class="main">
+
+
+    <!-- ==========================================
+         TOP HEADER
+    ========================================== -->
+
+    <header class="topbar">
+
+
+        <div class="page-title">
+
+            <h1>
+                Student Dashboard
+            </h1>
+
+            <p>
+                College Bus Tracking System
+            </p>
+
+        </div>
+
+
+        <div class="student-profile">
+
+
+            <div class="profile-icon">
+                🎓
+            </div>
+
+
+            <div>
+
+                <strong>
+                    {{ student.get("name", "Student") if student else "Student" }}
+                </strong>
+
+                <small>
+                    Student
+                </small>
+
+            </div>
+
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- ==========================================
+         CONTENT
+    ========================================== -->
+
+    <div class="content">
+
+
+        <!-- PAGE TITLE -->
+
+        <div class="section-heading">
+
+            <h2>
+                Overview
+            </h2>
+
+            <p>
+                Access your college bus transportation services.
+            </p>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             WELCOME
+        ========================================== -->
+
+        <div class="welcome-card">
+
+            <h2>
+
+                🎓 Welcome,
+                {{ student.get("name", "Student") if student else "Student" }}
+
+            </h2>
+
+            <p>
+                Track your bus, view route information,
+                check attendance and submit complaints.
+            </p>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             FEATURE CARDS
+        ========================================== -->
+
+        <div class="dashboard-grid">
+
+
+            <!-- LIVE LOCATION -->
+
+            <a href="{{ url_for('bus_tracking') }}"
+               class="dashboard-card">
+
+                <span>
+                    📍
+                </span>
+
+                <h3>
+                    Live Location Tracking
+                </h3>
+
+                <p>
+                    Track your college bus live using
+                    GPS and Google Maps.
+                </p>
+
+            </a>
+
+
+            <!-- BUS DETAILS -->
+
+            <a href="{{ url_for('bus_details') }}"
+               class="dashboard-card">
+
+                <span>
+                    🚌
+                </span>
+
+                <h3>
+                    View Bus Details
+                </h3>
+
+                <p>
+                    View bus number, driver details,
+                    capacity and assigned bus.
+                </p>
+
+            </a>
+
+
+            <!-- QR ATTENDANCE -->
+
+            <a href="{{ url_for('qr_attendance') }}"
+               class="dashboard-card">
+
+                <span>
+                    📱
+                </span>
+
+                <h3>
+                    QR Attendance
+                </h3>
+
+                <p>
+                    Scan the QR code to mark your
+                    bus attendance.
+                </p>
+
+            </a>
+
+
+            <!-- ROUTE -->
+
+            <a href="{{ url_for('route_information') }}"
+               class="dashboard-card">
+
+                <span>
+                    🛣️
+                </span>
+
+                <h3>
+                    Route Information
+                </h3>
+
+                <p>
+                    View bus route, stops and
+                    travel information.
+                </p>
+
+            </a>
+
+
+            <!-- COMPLAINT -->
+
+            <a href="{{ url_for('student_complaint') }}"
+               class="dashboard-card">
+
+                <span>
+                    📝
+                </span>
+
+                <h3>
+                    Submit Complaint
+                </h3>
+
+                <p>
+                    Report any problem related to
+                    the college bus service.
+                </p>
+
+            </a>
+
+
+        </div>
+
+
+
+        <!-- ==========================================
+             STUDENT INFORMATION
+        ========================================== -->
+
+        <div class="profile-card">
+
+            <h2>
+                👨‍🎓 Student Information
+            </h2>
+
+
+            {% if student %}
+
+            <div class="student-info-grid">
+
+
+                <div class="info-box">
+
+                    <span>
+                        Student Name
+                    </span>
+
+                    <strong>
+                        {{ student.get("name", "Not Available") }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Register Number
+                    </span>
+
+                    <strong>
+                        {{ student.get("register_no", "Not Available") }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Phone Number
+                    </span>
+
+                    <strong>
+                        {{ student.get("phone", "Not Available") }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Bus Number
+                    </span>
+
+                    <strong>
+                        {{ student.get("bus_number", "Not Assigned") }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Route
+                    </span>
+
+                    <strong>
+                        {{ student.get("route", "Not Assigned") }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            {% else %}
+
+            <p>
+                Student information not available.
+            </p>
+
+            {% endif %}
+
+
+        </div>
+
+
+
+        <!-- ==========================================
+             BUS STATUS
+        ========================================== -->
+
+        <div class="profile-card">
+
+            <h2>
+                🚌 Bus Status
+            </h2>
+
+
+            <div class="bus-status">
+
+
+                <div>
+
+                    <span style="
+                        display:block;
+                        color:#7d8798;
+                        font-size:12px;
+                        margin-bottom:7px;
+                    ">
+                        Bus Number
+                    </span>
+
+
+                    <span class="bus-number">
+
+                        {% if student %}
+
+                            {{ student.get(
+                                "bus_number",
+                                "Not Assigned"
+                            ) }}
+
+                        {% else %}
+
+                            Not Assigned
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <span style="
+                        display:block;
+                        color:#7d8798;
+                        font-size:12px;
+                        margin-bottom:7px;
+                    ">
+                        Current Status
+                    </span>
+
+
+                    <span class="status-active">
+                        ● Available
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</main>
+
 
 </body>
 

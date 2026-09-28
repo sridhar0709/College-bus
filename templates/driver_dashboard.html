@@ -8,165 +8,1734 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Driver Dashboard</title>
+    <title>Driver Dashboard | College Bus Tracking System</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+            overflow-x: hidden;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 286px;
+            height: 100vh;
+
+            background: #111d31;
+
+            color: white;
+
+            padding: 28px 17px;
+
+            z-index: 1000;
+
+            overflow-y: auto;
+        }
+
+
+        /* BRAND */
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            padding: 5px 12px 30px;
+
+            border-bottom: 1px solid #2a3548;
+        }
+
+
+        .brand-icon {
+
+            width: 48px;
+            height: 48px;
+
+            background: #2864e8;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 25px;
+
+            flex-shrink: 0;
+        }
+
+
+        .brand h2 {
+
+            font-size: 20px;
+
+            color: white;
+
+            margin-bottom: 5px;
+        }
+
+
+        .brand span {
+
+            display: block;
+
+            color: #aeb9ca;
+
+            font-size: 12px;
+        }
+
+
+        /* MENU TITLE */
+
+        .menu-title {
+
+            color: #7f8da5;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin: 30px 13px 12px;
+        }
+
+
+        /* NAV ITEM */
+
+        .nav-item {
+
+            width: 100%;
+
+            min-height: 54px;
+
+            border: none;
+
+            background: transparent;
+
+            color: #dce4f2;
+
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            padding: 0 17px;
+
+            border-radius: 11px;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            margin-bottom: 4px;
+
+            text-align: left;
+
+            transition: 0.2s;
+        }
+
+
+        .nav-item:hover {
+
+            background: #1d2d49;
+
+            color: white;
+        }
+
+
+        .nav-item.active {
+
+            background: #2864e8;
+
+            color: white;
+        }
+
+
+        .nav-icon {
+
+            width: 25px;
+
+            text-align: center;
+
+            font-size: 17px;
+
+            flex-shrink: 0;
+        }
+
+
+        /* LOGOUT */
+
+        .logout {
+
+            margin-top: 28px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #2a3548;
+        }
+
+
+        .logout a {
+
+            color: #ff7d85;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+
+            margin-left: 286px;
+
+            min-height: 100vh;
+
+            width: calc(100% - 286px);
+        }
+
+
+        /* =====================================================
+           TOPBAR
+        ===================================================== */
+
+        .topbar {
+
+            height: 94px;
+
+            background: white;
+
+            border-bottom: 1px solid #e4e9f1;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 34px;
+        }
+
+
+        .page-title h1 {
+
+            font-size: 25px;
+
+            color: #172033;
+
+            margin-bottom: 6px;
+        }
+
+
+        .page-title p {
+
+            color: #7d8798;
+
+            font-size: 14px;
+        }
+
+
+        /* DRIVER PROFILE TOP RIGHT */
+
+        .admin-profile {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .profile-icon {
+
+            width: 44px;
+            height: 44px;
+
+            border-radius: 50%;
+
+            background: #eaf1ff;
+
+            color: #2864e8;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: bold;
+
+            font-size: 18px;
+        }
+
+
+        .admin-profile strong {
+
+            display: block;
+
+            font-size: 14px;
+        }
+
+
+        .admin-profile small {
+
+            display: block;
+
+            color: #7d8798;
+
+            margin-top: 4px;
+        }
+
+
+        /* =====================================================
+           CONTENT
+        ===================================================== */
+
+        .content {
+
+            padding: 35px;
+
+            width: 100%;
+        }
+
+
+        .section {
+
+            display: none;
+        }
+
+
+        .section.active {
+
+            display: block;
+        }
+
+
+        /* =====================================================
+           SECTION HEADING
+        ===================================================== */
+
+        .section-heading {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .section-heading h2 {
+
+            font-size: 23px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .section-heading p {
+
+            color: #7d8798;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           WELCOME
+        ===================================================== */
+
+        .welcome-card {
+
+            background: white;
+
+            border: 1px solid #e5eaf1;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 5px 18px rgba(25, 42, 70, 0.05);
+        }
+
+
+        .welcome-card h2 {
+
+            font-size: 21px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .welcome-card p {
+
+            color: #7d8798;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           STAT CARDS
+        ===================================================== */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 18px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .stat-card {
+
+            background: white;
+
+            border: 1px solid #e4e9f1;
+
+            border-radius: 15px;
+
+            min-height: 165px;
+
+            padding: 24px;
+
+            box-shadow: 0 5px 18px rgba(25, 42, 70, 0.05);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .stat-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 75px;
+            height: 75px;
+
+            border-radius: 50%;
+
+            background: #edf3ff;
+
+            right: -20px;
+            bottom: -25px;
+        }
+
+
+        .stat-icon {
+
+            width: 44px;
+            height: 44px;
+
+            border-radius: 10px;
+
+            background: #edf3ff;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+
+            margin-bottom: 18px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .stat-card h3 {
+
+            font-size: 17px;
+
+            margin-bottom: 8px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .stat-card p {
+
+            font-size: 13px;
+
+            color: #7d8798;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            background: white;
+
+            border: 1px solid #e4e9f1;
+
+            border-radius: 15px;
+
+            padding: 24px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 5px 18px rgba(25, 42, 70, 0.05);
+        }
+
+
+        .card-header {
+
+            margin-bottom: 22px;
+        }
+
+
+        .card-header h3 {
+
+            font-size: 18px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .card-header span {
+
+            color: #7d8798;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           INFORMATION GRID
+        ===================================================== */
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 15px;
+        }
+
+
+        .info-box {
+
+            background: #f8faff;
+
+            border: 1px solid #e7edf5;
+
+            border-radius: 10px;
+
+            padding: 18px;
+        }
+
+
+        .info-box span {
+
+            display: block;
+
+            color: #7d8798;
+
+            font-size: 12px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .info-box strong {
+
+            display: block;
+
+            color: #172033;
+
+            font-size: 15px;
+
+            word-break: break-word;
+        }
+
+
+        /* =====================================================
+           GPS
+        ===================================================== */
+
+        .gps-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 15px;
+
+            background: #f8faff;
+
+            border: 1px solid #e7edf5;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .status-dot {
+
+            width: 11px;
+            height: 11px;
+
+            border-radius: 50%;
+
+            background: #ef4444;
+
+            flex-shrink: 0;
+        }
+
+
+        .status-dot.active {
+
+            background: #22c55e;
+        }
+
+
+        .gps-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 18px;
+        }
+
+
+        .gps-box {
+
+            background: #f8faff;
+
+            border: 1px solid #e7edf5;
+
+            border-radius: 10px;
+
+            padding: 20px;
+        }
+
+
+        .gps-box span {
+
+            display: block;
+
+            color: #7d8798;
+
+            font-size: 12px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .gps-box strong {
+
+            font-size: 18px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+
+            .info-grid {
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+        }
+
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+
+                width: 230px;
+            }
+
+
+            .main {
+
+                margin-left: 230px;
+
+                width: calc(100% - 230px);
+            }
+
+
+            .stats {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .topbar {
+
+                padding: 0 20px;
+            }
+
+
+            .content {
+
+                padding: 20px;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+            }
+
+
+            .main {
+
+                margin-left: 0;
+
+                width: 100%;
+            }
+
+
+            .topbar {
+
+                height: auto;
+
+                padding: 20px;
+
+                gap: 15px;
+            }
+
+
+            .info-grid,
+            .gps-grid {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-<nav class="dashboard-nav">
 
-    <h2>👨‍✈️ Driver Dashboard</h2>
+<!-- =====================================================
+     SIDEBAR
+====================================================== -->
 
-    <a href="{{ url_for('logout') }}">
-        Logout
-    </a>
-
-</nav>
+<aside class="sidebar">
 
 
-<div class="dashboard-container">
+    <!-- BRAND -->
 
-    <h1>Welcome Driver</h1>
+    <div class="brand">
 
-
-    <div class="profile-card">
-
-        <h2>Driver Information</h2>
-
-        {% if driver %}
-
-        <p>
-            <strong>Name:</strong>
-            {{ driver.get("name", "Not Available") }}
-        </p>
-
-        <p>
-            <strong>Driver ID:</strong>
-            {{ driver.get("driver_id", "Not Available") }}
-        </p>
-
-        <p>
-            <strong>Phone:</strong>
-            {{ driver.get("phone", "Not Available") }}
-        </p>
-
-        <p>
-            <strong>Bus Number:</strong>
-            {{ driver.get("bus_number", "Not Assigned") }}
-        </p>
-
-        <p>
-            <strong>Route:</strong>
-            {{ driver.get("route", "Not Assigned") }}
-        </p>
-
-        {% endif %}
-
-    </div>
-
-
-    <div class="dashboard-grid">
-
-        <div class="dashboard-card">
-
-            <span>🚌</span>
-
-            <h3>My Bus</h3>
-
-            <p>
-                View assigned bus information.
-            </p>
-
+        <div class="brand-icon">
+            🚌
         </div>
 
+        <div>
 
-        <div class="dashboard-card">
+            <h2>
+                BusTrack
+            </h2>
 
-            <span>📍</span>
-
-            <h3>GPS Location</h3>
-
-            <p>
-                Update and manage bus location.
-            </p>
-
-        </div>
-
-
-        <div class="dashboard-card">
-
-            <span>📝</span>
-
-            <h3>Complaints</h3>
-
-            <p>
-                Submit transportation complaints.
-            </p>
+            <span>
+                College Transport System
+            </span>
 
         </div>
 
     </div>
 
-</div>
-<!-- ==========================================
-     DRIVER LIVE GPS
-========================================== -->
 
-<div class="card">
+    <!-- MAIN MENU -->
 
-    <h2>📍 Live Bus GPS</h2>
+    <div class="menu-title">
+        MAIN MENU
+    </div>
 
-    <p id="gpsStatus">
-        🔄 Starting GPS...
-    </p>
 
-    <p>
-        <strong>Latitude:</strong>
-        <span id="latitude">-</span>
-    </p>
+    <button class="nav-item active"
+            onclick="showSection('dashboard', this)">
 
-    <p>
-        <strong>Longitude:</strong>
-        <span id="longitude">-</span>
-    </p>
+        <span class="nav-icon">
+            ▦
+        </span>
 
-</div>
+        Dashboard
+
+    </button>
+
+
+    <button class="nav-item"
+            onclick="showSection('bus', this)">
+
+        <span class="nav-icon">
+            🚌
+        </span>
+
+        My Bus
+
+    </button>
+
+
+    <button class="nav-item"
+            onclick="showSection('profile', this)">
+
+        <span class="nav-icon">
+            👨‍✈️
+        </span>
+
+        Driver Profile
+
+    </button>
+
+
+    <!-- MONITORING -->
+
+    <div class="menu-title">
+        MONITORING
+    </div>
+
+
+    <button class="nav-item"
+            onclick="showSection('gps', this)">
+
+        <span class="nav-icon">
+            📍
+        </span>
+
+        Live GPS
+
+    </button>
+
+
+    <button class="nav-item"
+            onclick="showSection('complaints', this)">
+
+        <span class="nav-icon">
+            ⚠️
+        </span>
+
+        Complaints
+
+    </button>
+
+
+    <!-- LOGOUT -->
+
+    <div class="logout">
+
+        <a href="{{ url_for('logout') }}"
+           class="nav-item">
+
+            <span class="nav-icon">
+                ↪
+            </span>
+
+            Logout
+
+        </a>
+
+    </div>
+
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
+<main class="main">
+
+
+    <!-- =================================================
+         TOP HEADER
+    ================================================== -->
+
+    <header class="topbar">
+
+
+        <div class="page-title">
+
+            <h1 id="pageTitle">
+                Driver Dashboard
+            </h1>
+
+            <p>
+                College Bus Tracking System
+            </p>
+
+        </div>
+
+
+        <div class="admin-profile">
+
+
+            <div class="profile-icon">
+                D
+            </div>
+
+
+            <div>
+
+                <strong>
+                    {{ driver.get("name", "Driver") if driver else "Driver" }}
+                </strong>
+
+                <small>
+                    Bus Driver
+                </small>
+
+            </div>
+
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- =================================================
+         PAGE CONTENT
+    ================================================== -->
+
+    <div class="content">
+
+
+        <!-- =================================================
+             DASHBOARD
+        ================================================== -->
+
+        <section id="dashboard"
+                 class="section active">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        Overview
+                    </h2>
+
+                    <p>
+                        Manage your college bus transportation activities.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- WELCOME -->
+
+            <div class="welcome-card">
+
+                <h2>
+
+                    👨‍✈️ Welcome
+                    {{ driver.get("name", "Driver") if driver else "Driver" }}
+
+                </h2>
+
+                <p>
+                    Manage your assigned bus and monitor live GPS location.
+                </p>
+
+            </div>
+
+
+            <!-- THREE CARDS -->
+
+            <div class="stats">
+
+
+                <!-- BUS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🚌
+                    </div>
+
+                    <h3>
+                        My Bus
+                    </h3>
+
+                    <p>
+                        View your assigned bus information.
+                    </p>
+
+                </div>
+
+
+                <!-- GPS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        📍
+                    </div>
+
+                    <h3>
+                        Live GPS
+                    </h3>
+
+                    <p>
+                        Update and manage bus location.
+                    </p>
+
+                </div>
+
+
+                <!-- COMPLAINTS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Complaints
+                    </h3>
+
+                    <p>
+                        View transportation complaints.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- DRIVER INFORMATION -->
+
+            <div class="card">
+
+
+                <div class="card-header">
+
+                    <h3>
+                        Driver Information
+                    </h3>
+
+                    <span>
+                        Registered driver details
+                    </span>
+
+                </div>
+
+
+                {% if driver %}
+
+                <div class="info-grid">
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Driver Name
+                        </span>
+
+                        <strong>
+                            {{ driver.get("name", "Not Available") }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Driver ID
+                        </span>
+
+                        <strong>
+                            {{ driver.get("driver_id", "Not Available") }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Phone
+                        </span>
+
+                        <strong>
+                            {{ driver.get("phone", "Not Available") }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Bus Number
+                        </span>
+
+                        <strong>
+                            {{ driver.get("bus_number", "Not Assigned") }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            License
+                        </span>
+
+                        <strong>
+                            {{ driver.get("license", "Not Available") }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Experience
+                        </span>
+
+                        <strong>
+                            {{ driver.get("experience", "Not Available") }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+                {% else %}
+
+                <p>
+                    Driver information is not available.
+                </p>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             MY BUS
+        ================================================== -->
+
+        <section id="bus"
+                 class="section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        My Bus
+                    </h2>
+
+                    <p>
+                        View your assigned bus information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+
+                <div class="card-header">
+
+                    <h3>
+                        🚌 Assigned Bus
+                    </h3>
+
+                    <span>
+                        Current bus assignment
+                    </span>
+
+                </div>
+
+
+                <div class="info-grid">
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Bus Number
+                        </span>
+
+                        <strong>
+                            {{ driver.get("bus_number", "Not Assigned") if driver else "Not Assigned" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Driver
+                        </span>
+
+                        <strong>
+                            {{ driver.get("name", "Not Available") if driver else "Not Available" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Route
+                        </span>
+
+                        <strong>
+                            {{ driver.get("route", "Not Assigned") if driver else "Not Assigned" }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             DRIVER PROFILE
+        ================================================== -->
+
+        <section id="profile"
+                 class="section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        Driver Profile
+                    </h2>
+
+                    <p>
+                        View your registered driver information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+
+                <div class="card-header">
+
+                    <h3>
+                        👨‍✈️ Profile Information
+                    </h3>
+
+                </div>
+
+
+                {% if driver %}
+
+                <div class="info-grid">
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Name
+                        </span>
+
+                        <strong>
+                            {{ driver.get("name", "Not Available") }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Driver ID
+                        </span>
+
+                        <strong>
+                            {{ driver.get("driver_id", "Not Available") }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Phone
+                        </span>
+
+                        <strong>
+                            {{ driver.get("phone", "Not Available") }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            License
+                        </span>
+
+                        <strong>
+                            {{ driver.get("license", "Not Available") }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Experience
+                        </span>
+
+                        <strong>
+                            {{ driver.get("experience", "Not Available") }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span>
+                            Bus Number
+                        </span>
+
+                        <strong>
+                            {{ driver.get("bus_number", "Not Assigned") }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             LIVE GPS
+        ================================================== -->
+
+        <section id="gps"
+                 class="section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        Live GPS
+                    </h2>
+
+                    <p>
+                        Monitor and share your current bus location.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+
+                <div class="card-header">
+
+                    <h3>
+                        📍 Live Bus Location
+                    </h3>
+
+                    <span>
+                        GPS location from driver's device
+                    </span>
+
+                </div>
+
+
+                <div class="gps-status">
+
+                    <span id="statusDot"
+                          class="status-dot">
+                    </span>
+
+                    <strong id="gpsStatus">
+                        🔄 Starting GPS...
+                    </strong>
+
+                </div>
+
+
+                <div class="gps-grid">
+
+
+                    <div class="gps-box">
+
+                        <span>
+                            Latitude
+                        </span>
+
+                        <strong id="latitude">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="gps-box">
+
+                        <span>
+                            Longitude
+                        </span>
+
+                        <strong id="longitude">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             COMPLAINTS
+        ================================================== -->
+
+        <section id="complaints"
+                 class="section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        Complaints
+                    </h2>
+
+                    <p>
+                        Transportation complaint section.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+
+                <div class="card-header">
+
+                    <h3>
+                        ⚠️ Transportation Complaints
+                    </h3>
+
+                    <span>
+                        Driver complaint information
+                    </span>
+
+                </div>
+
+
+                <p style="color:#7d8798;">
+
+                    Transportation complaints can be managed
+                    from this section.
+
+                </p>
+
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
 <script>
+
+
+/* =====================================================
+   CHANGE SECTIONS
+===================================================== */
+
+function showSection(sectionId, button) {
+
+
+    /* Hide sections */
+
+    document
+        .querySelectorAll(".section")
+        .forEach(function(section) {
+
+            section.classList.remove("active");
+
+        });
+
+
+    /* Show selected section */
+
+    const selected =
+        document.getElementById(sectionId);
+
+
+    if (selected) {
+
+        selected.classList.add("active");
+
+    }
+
+
+    /* Remove active menu */
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(function(item) {
+
+            item.classList.remove("active");
+
+        });
+
+
+    /* Active selected menu */
+
+    if (button) {
+
+        button.classList.add("active");
+
+    }
+
+
+    /* Page title */
+
+    const titles = {
+
+        dashboard: "Driver Dashboard",
+
+        bus: "My Bus",
+
+        profile: "Driver Profile",
+
+        gps: "Live GPS",
+
+        complaints: "Complaints"
+
+    };
+
+
+    document.getElementById("pageTitle").textContent =
+        titles[sectionId] || "Driver Dashboard";
+
+}
+
+
+
+/* =====================================================
+   GPS
+===================================================== */
 
 function startDriverGPS() {
 
+
+    const status =
+        document.getElementById("gpsStatus");
+
+
+    const dot =
+        document.getElementById("statusDot");
+
+
     if (!navigator.geolocation) {
 
-        document.getElementById("gpsStatus").textContent =
+        status.textContent =
             "❌ GPS is not supported by this browser.";
 
         return;
+
     }
 
-    document.getElementById("gpsStatus").textContent =
+
+    status.textContent =
         "🔄 Requesting GPS permission...";
 
 
     navigator.geolocation.watchPosition(
 
+
         function(position) {
 
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
+
+            const latitude =
+                position.coords.latitude;
+
+
+            const longitude =
+                position.coords.longitude;
 
 
             document.getElementById("latitude").textContent =
                 latitude.toFixed(6);
 
+
             document.getElementById("longitude").textContent =
                 longitude.toFixed(6);
 
-            document.getElementById("gpsStatus").textContent =
+
+            status.textContent =
                 "🟢 GPS location is active";
+
+
+            dot.classList.add("active");
 
 
             fetch("/api/update_location", {
@@ -174,63 +1743,107 @@ function startDriverGPS() {
                 method: "POST",
 
                 headers: {
-                    "Content-Type": "application/json"
+
+                    "Content-Type":
+                        "application/json"
+
                 },
 
                 body: JSON.stringify({
+
                     latitude: latitude,
+
                     longitude: longitude
+
                 })
 
             })
 
+
             .then(function(response) {
+
                 return response.json();
+
             })
+
 
             .then(function(data) {
 
-                console.log("GPS Server Response:", data);
+                console.log(
+                    "GPS Server Response:",
+                    data
+                );
 
             })
 
+
             .catch(function(error) {
 
-                console.error("GPS update error:", error);
+                console.error(
+                    "GPS update error:",
+                    error
+                );
 
-                document.getElementById("gpsStatus").textContent =
+                status.textContent =
                     "🔴 Failed to send GPS location.";
+
+                dot.classList.remove("active");
 
             });
 
+
         },
+
 
         function(error) {
 
-            console.error("GPS Error:", error);
 
-            document.getElementById("gpsStatus").textContent =
+            console.error(
+                "GPS Error:",
+                error
+            );
+
+
+            status.textContent =
                 "❌ Unable to get GPS location.";
+
+            dot.classList.remove("active");
 
         },
 
+
         {
+
             enableHighAccuracy: true,
+
             timeout: 10000,
+
             maximumAge: 0
+
         }
 
     );
+
 }
 
 
-document.addEventListener("DOMContentLoaded", function() {
 
-    startDriverGPS();
+/* =====================================================
+   PAGE LOAD
+===================================================== */
 
-});
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        startDriverGPS();
+
+    }
+);
+
 
 </script>
+
 
 </body>
 

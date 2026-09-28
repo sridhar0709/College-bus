@@ -1,33 +1,841 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Bus Route</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Bus Route | College Bus Tracking</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* ================================
+           LAYOUT
+        ================================= */
+
+        .parent-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ================================
+           SIDEBAR
+        ================================= */
+
+        .parent-sidebar {
+            width: 270px;
+            min-width: 270px;
+            background: #111c30;
+            color: white;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .sidebar-brand {
+            padding: 30px 25px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: #2864e8;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .brand-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .brand-subtitle {
+            font-size: 12px;
+            color: #9aa8bf;
+            margin-top: 4px;
+        }
+
+        .sidebar-section {
+            padding: 28px 20px 8px;
+            color: #71809a;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-menu {
+            padding: 0 16px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            margin: 5px 0;
+            color: #d9e1ef;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .sidebar-menu a.active {
+            background: #2864e8;
+            color: white;
+        }
+
+        .menu-icon {
+            width: 22px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .sidebar-logout {
+            position: absolute;
+            bottom: 25px;
+            left: 16px;
+            right: 16px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+            padding-top: 20px;
+        }
+
+        .sidebar-logout a {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            padding: 14px 18px;
+            color: #ff8b8b;
+            text-decoration: none;
+            border-radius: 12px;
+        }
+
+        .sidebar-logout a:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* ================================
+           MAIN
+        ================================= */
+
+        .parent-main {
+            margin-left: 270px;
+            width: calc(100% - 270px);
+            min-height: 100vh;
+        }
+
+        /* ================================
+           TOP HEADER
+        ================================= */
+
+        .top-header {
+            height: 92px;
+            background: white;
+            border-bottom: 1px solid #e2e7ef;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 34px;
+        }
+
+        .top-header h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .top-header p {
+            margin: 7px 0 0;
+            color: #71809a;
+            font-size: 14px;
+        }
+
+        .parent-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-circle {
+            width: 44px;
+            height: 44px;
+            background: #edf3ff;
+            color: #2864e8;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-name {
+            font-weight: 700;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #8491a7;
+            margin-top: 3px;
+        }
+
+        /* ================================
+           CONTENT
+        ================================= */
+
+        .content {
+            padding: 32px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .page-heading p {
+            margin: 7px 0 0;
+            color: #71809a;
+        }
+
+        /* ================================
+           ROUTE CARD
+        ================================= */
+
+        .route-card {
+            background: white;
+            border: 1px solid #e4e9f1;
+            border-radius: 16px;
+            padding: 28px;
+
+            box-shadow: 0 4px 15px rgba(30,50,80,0.04);
+
+            max-width: 100%;
+        }
+
+        .route-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            border-bottom: 1px solid #e8edf4;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .route-icon {
+            width: 52px;
+            height: 52px;
+
+            background: #edf3ff;
+            color: #2864e8;
+
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+        }
+
+        .route-card-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .route-card-header p {
+            margin: 5px 0 0;
+            color: #71809a;
+            font-size: 14px;
+        }
+
+        /* ================================
+           ROUTE DETAILS
+        ================================= */
+
+        .route-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+
+            margin-bottom: 30px;
+        }
+
+        .route-info {
+            background: #f8faff;
+            border: 1px solid #e4eaf4;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .route-info-title {
+            font-size: 13px;
+            color: #71809a;
+            margin-bottom: 8px;
+        }
+
+        .route-info-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* ================================
+           ROUTE PATH
+        ================================= */
+
+        .route-path-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .route-path {
+            position: relative;
+            padding-left: 35px;
+        }
+
+        .route-path::before {
+            content: "";
+            position: absolute;
+            left: 10px;
+            top: 15px;
+            bottom: 15px;
+            width: 3px;
+            background: #2864e8;
+            border-radius: 5px;
+        }
+
+        .route-stop {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .route-stop:last-child {
+            margin-bottom: 0;
+        }
+
+        .stop-dot {
+            position: absolute;
+            left: -31px;
+
+            width: 18px;
+            height: 18px;
+
+            background: white;
+            border: 4px solid #2864e8;
+            border-radius: 50%;
+        }
+
+        .stop-content {
+            background: #f8faff;
+            border: 1px solid #e4eaf4;
+            border-radius: 10px;
+
+            padding: 14px 18px;
+
+            width: 100%;
+        }
+
+        .stop-content strong {
+            font-size: 15px;
+        }
+
+        .stop-content span {
+            display: block;
+            color: #71809a;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* ================================
+           BACK BUTTON
+        ================================= */
+
+        .back-button {
+            display: inline-block;
+
+            margin-top: 25px;
+
+            background: #2864e8;
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 20px;
+
+            border-radius: 9px;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-button:hover {
+            background: #1f55ca;
+        }
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 900px) {
+
+            .parent-sidebar {
+                width: 220px;
+                min-width: 220px;
+            }
+
+            .parent-main {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
+
+            .route-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .parent-layout {
+                display: block;
+            }
+
+            .parent-sidebar {
+                position: relative;
+                width: 100%;
+                min-width: 100%;
+                min-height: auto;
+            }
+
+            .parent-main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .sidebar-logout {
+                position: relative;
+                bottom: auto;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .top-header {
+                height: auto;
+                padding: 20px;
+            }
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<div class="dashboard-container">
+<div class="parent-layout">
 
-    <h1>🛣️ Bus Route</h1>
 
-    <div class="profile-card">
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
 
-        <h2>College Bus Route</h2>
+    <aside class="parent-sidebar">
 
-        <p>Starting Point → College</p>
+        <div class="sidebar-brand">
 
-        <p>Stop 1 → Stop 2 → Stop 3 → College</p>
+            <div class="brand-icon">
+                🚌
+            </div>
 
-    </div>
+            <div>
 
-    <a href="{{ url_for('parent_dashboard') }}">
-        ← Back to Parent Dashboard
-    </a>
+                <div class="brand-title">
+                    BusTrack
+                </div>
+
+                <div class="brand-subtitle">
+                    College Transport System
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="sidebar-section">
+            Main Menu
+        </div>
+
+
+        <div class="sidebar-menu">
+
+            <a href="{{ url_for('parent_dashboard') }}">
+
+                <span class="menu-icon">▦</span>
+
+                Dashboard
+
+            </a>
+
+
+            <a href="{{ url_for('parent_bus_tracking') }}">
+
+                <span class="menu-icon">📍</span>
+
+                Live Bus
+
+            </a>
+
+
+            <a href="{{ url_for('parent_bus_route') }}"
+               class="active">
+
+                <span class="menu-icon">🛣️</span>
+
+                Bus Route
+
+            </a>
+
+
+            <a href="{{ url_for('parent_eta') }}">
+
+                <span class="menu-icon">⏱️</span>
+
+                Bus ETA
+
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-section">
+            Monitoring
+        </div>
+
+
+        <div class="sidebar-menu">
+
+            <a href="{{ url_for('parent_bus_tracking') }}">
+
+                <span class="menu-icon">🚌</span>
+
+                GPS Tracking
+
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-logout">
+
+            <a href="{{ url_for('logout') }}">
+
+                <span class="menu-icon">↪</span>
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================== -->
+
+    <main class="parent-main">
+
+
+        <!-- HEADER -->
+
+        <header class="top-header">
+
+            <div>
+
+                <h1>
+                    Bus Route
+                </h1>
+
+                <p>
+                    College Bus Tracking System
+                </p>
+
+            </div>
+
+
+            <div class="parent-user">
+
+                <div class="user-circle">
+                    P
+                </div>
+
+                <div>
+
+                    <div class="user-name">
+
+                        {{ parent.get("name", "Parent")
+                           if parent else "Parent" }}
+
+                    </div>
+
+                    <div class="user-role">
+                        Parent
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+
+            <div class="page-heading">
+
+                <h2>
+                    🛣️ Bus Route
+                </h2>
+
+                <p>
+                    View your child's college bus route and stops.
+                </p>
+
+            </div>
+
+
+            <!-- ROUTE CARD -->
+
+            <div class="route-card">
+
+
+                <div class="route-card-header">
+
+                    <div class="route-icon">
+                        🛣️
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            College Bus Route
+                        </h2>
+
+                        <p>
+                            Current assigned bus route
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROUTE BASIC INFORMATION -->
+
+                <div class="route-details">
+
+
+                    <div class="route-info">
+
+                        <div class="route-info-title">
+                            Starting Point
+                        </div>
+
+                        <div class="route-info-value">
+                            Starting Point
+                        </div>
+
+                    </div>
+
+
+                    <div class="route-info">
+
+                        <div class="route-info-title">
+                            Destination
+                        </div>
+
+                        <div class="route-info-value">
+                            College
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ROUTE STOPS -->
+
+                <div class="route-path-title">
+                    📍 Route Stops
+                </div>
+
+
+                <div class="route-path">
+
+
+                    <div class="route-stop">
+
+                        <div class="stop-dot"></div>
+
+                        <div class="stop-content">
+
+                            <strong>
+                                Starting Point
+                            </strong>
+
+                            <span>
+                                Bus journey starts here
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="route-stop">
+
+                        <div class="stop-dot"></div>
+
+                        <div class="stop-content">
+
+                            <strong>
+                                Stop 1
+                            </strong>
+
+                            <span>
+                                First bus stop
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="route-stop">
+
+                        <div class="stop-dot"></div>
+
+                        <div class="stop-content">
+
+                            <strong>
+                                Stop 2
+                            </strong>
+
+                            <span>
+                                Second bus stop
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="route-stop">
+
+                        <div class="stop-dot"></div>
+
+                        <div class="stop-content">
+
+                            <strong>
+                                Stop 3
+                            </strong>
+
+                            <span>
+                                Third bus stop
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="route-stop">
+
+                        <div class="stop-dot"></div>
+
+                        <div class="stop-content">
+
+                            <strong>
+                                College</strong>
+
+                            <span>
+                                Final destination
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- BACK -->
+
+            <a href="{{ url_for('parent_dashboard') }}"
+               class="back-button">
+
+                ← Back to Parent Dashboard
+
+            </a>
+
+
+        </div>
+
+    </main>
 
 </div>
 
 </body>
+
 </html>
